@@ -4,7 +4,6 @@
 
 #include <cstring>
 #include "ClientConnectCommand.h"
-#include "main.cpp"
 
 ClientConnectCommand::ClientConnectCommand(map<string, Data *> &s_t) : symbol_table(s_t) {
 
