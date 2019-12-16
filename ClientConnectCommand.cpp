@@ -65,9 +65,6 @@ void ClientConnectCommand::extractAddressFromString(string *str) {
   port = s.substr(portStart, 4);
   ip = s.substr(ipStart, ipLen);
 }
-void ClientConnectCommand::closeClient() {
-  close(client_socket);
-}
 void ClientConnectCommand::updateServer(string *s) {
   int is_sent = send(client_socket, s, s->length(), 0);
   if (is_sent == -1) {
@@ -75,4 +72,8 @@ void ClientConnectCommand::updateServer(string *s) {
   } else {
     std::cout << "Hello message sent to server" << std::endl;
   }
+}
+
+void ClientConnectCommand::closeClient() {
+  close(client_socket);
 }
