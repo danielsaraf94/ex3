@@ -3,6 +3,7 @@
 #include "Command.h"
 #include "Lexer.h"
 #include "Data.h"
+//check
 using namespace std;
 void parse(vector<string> &, map<string, Command *> &);
 void commandMapInit(map<string, Command *> &command_map);
