@@ -1,6 +1,6 @@
 //
 // Created by shlomo on 13/12/2019.
-//shlomo
+//shlomo yeled haradsdsadsad
 
 #include "Data.h"
 Data::Data(string str, int biding) {
