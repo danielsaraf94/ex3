@@ -29,7 +29,7 @@ class ClientConnectCommand : public Command {
   ClientConnectCommand(map<string, Data *> &);
   void execute(string *);
   void extractAddressFromString(string *);
-  void updateServer(string *);
+  void updateServer(char []);
   void closeClient();
 };
 
