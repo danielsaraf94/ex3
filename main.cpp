@@ -23,7 +23,6 @@ int main(int argc, char *argv[]) {
   parse(string_vec, command_map);
 
 }
-//little change
 void commandMapInit(map<string, Command *> *command_map,
                     map<string, Data *> *symbol_table,
                     map<string, Data *> *sim_table) {
@@ -36,7 +35,6 @@ void commandMapInit(map<string, Command *> *command_map,
   openData->execute(str1);
 
 }
-
 void parse(vector<string> &string_vec, map<string, Command *> &command_map) {
   for (int i = 0; i < string_vec.size(); i += 2) {
     Command *c = command_map[string_vec[i]];
