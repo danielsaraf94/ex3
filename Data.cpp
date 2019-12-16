@@ -16,3 +16,4 @@ void Data::setValue(double val) {
 double Data::getValue(){
   return this->value;
 }
+//uyiuyiu
