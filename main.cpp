@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
   parse(string_vec, command_map);
 
 }
-
+//little change
 void commandMapInit(map<string, Command *> *command_map,
                     map<string, Data *> *symbol_table,
                     map<string, Data *> *sim_table) {
