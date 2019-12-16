@@ -5,6 +5,7 @@
 #include "Data.h"
 #include "OpenServerCommand.h"
 #include "ClientConnectCommand.h"
+//
 using namespace std;
 void parse(vector<string> &, map<string, Command *> &);
 void commandMapInit(map<string, Command *> *command_map, map<string, Data *> *, map<string, Data *> *);

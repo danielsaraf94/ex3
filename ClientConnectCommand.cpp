@@ -25,7 +25,7 @@ void ClientConnectCommand::execute(string *s) {
   address.sin_addr.s_addr = inet_addr(ip.c_str());  //the localhost address
   address.sin_port = htons(stoi(port));
   //we need to convert our number (both port & localhost)
-  // to a number that the network understands.
+  // to a number that the network understands
 
   // Requesting a connection with the server on local host with port
   int is_connect = connect(client_socket, (struct sockaddr *) &address, sizeof(address));
