@@ -7,7 +7,8 @@
 using namespace std;
 void parse(vector<string> &, map<string, Command *> &);
 void commandMapInit(map<string, Command *> *command_map, map<string, Data *> *, map<string, Data *> *);
-
+bool isChange = false;
+string s;
 int main(int argc, char *argv[]) {
   Lexer lex(argv[1]);
   vector<string> string_vec;

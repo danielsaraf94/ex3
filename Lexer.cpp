@@ -1,6 +1,5 @@
 //
 // Created by shlomo on 12/12/2019.
-//shlomo
 
 #include <fstream>
 #include "Lexer.h"
