@@ -16,7 +16,7 @@ void ClientConnectCommand::execute(string *s) {
   client_socket = socket(AF_INET, SOCK_STREAM, 0);
   if (client_socket == -1) {
     //error
-    std::cerr << "Could not create a socket"<<std::endl;
+    std::cerr << "Could not create a socket" << std::endl;
     exit(1);
   }
 
@@ -29,26 +29,14 @@ void ClientConnectCommand::execute(string *s) {
   // to a number that the network understands.
 
   // Requesting a connection with the server on local host with port
-  int is_connect = connect(client_socket, (struct sockaddr *)&address, sizeof(address));
+  int is_connect = connect(client_socket, (struct sockaddr *) &address, sizeof(address));
   if (is_connect == -1) {
-    std::cerr << "Could not connect to host server"<<std::endl;
+    std::cerr << "Could not connect to host server" << std::endl;
     exit(2);
   } else {
-    std::cout<<"Client is now connected to server" <<std::endl;
+    std::cout << "Client is now connected to server" << std::endl;
   }
 
-  //if here we made a connection
-  char hello[] = "set /engines/active-engine/auto-start 1\r\n";
-  while(true) {
-    while (!isChange) {
-    }
-    int is_sent = send(client_socket, hello, strlen(hello), 0);
-    if (is_sent == -1) {
-      std::cout << "Error sending message" << std::endl;
-    } else {
-      std::cout << "Hello message sent to server" << std::endl;
-    }
-  }
 }
 void ClientConnectCommand::extractAddressFromString(string *str) {
   string s = *str;
@@ -80,4 +68,11 @@ void ClientConnectCommand::extractAddressFromString(string *str) {
 void ClientConnectCommand::closeClient() {
   close(client_socket);
 }
-
+void ClientConnectCommand::updateServer(string *s) {
+  int is_sent = send(client_socket, s, s->length(), 0);
+  if (is_sent == -1) {
+    std::cout << "Error sending message" << std::endl;
+  } else {
+    std::cout << "Hello message sent to server" << std::endl;
+  }
+}
