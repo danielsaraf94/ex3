@@ -18,7 +18,7 @@
 #include <arpa/inet.h>
 
 using namespace std;
-
+//
 class ClientConnectCommand : public Command {
   string ip;
   string port;
@@ -29,6 +29,7 @@ class ClientConnectCommand : public Command {
   ClientConnectCommand(map<string, Data *> &);
   void execute(string *);
   void extractAddressFromString(string *);
+  void updateServer(char []);
   void closeClient();
 };
 
