@@ -15,10 +15,10 @@ using namespace std;
 class Var : public Command {
   map<string, Command *> *str_command_map;
   map<string, Data *> *varName_data_map;
-  map<string, Data *> *sim_data_map;
+  map<string, Data*> *sim_num_map;
   int getSign(string *, int *);
  public:
-  Var(map<string, Command *> *, map<string, Data *> *, map<string, Data *> *);
+  Var(map<string, Command *> *, map<string, Data *> *, map<string,Data*> *);
   void execute(string *);
   ~Var() {};
 };

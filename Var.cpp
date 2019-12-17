@@ -3,10 +3,10 @@
 //
 
 #include "Var.h"
-Var::Var(map<string, Command *> *map1, map<string, Data *> *map2, map<string, Data *> *map3) {
+Var::Var(map<string, Command *> *map1, map<string, Data *> *map2, map<string,Data*> *map3) {
   this->str_command_map = map1;
   this->varName_data_map = map2;
-  this->sim_data_map = map3;
+  this->sim_num_map = map3;
 }
 void Var::execute(string *str) {
   int index = 0;
@@ -19,12 +19,12 @@ void Var::execute(string *str) {
     data = new Data("", sign);
     data->setValue(value);
   } else {
-    string sim = str->substr(index + 4, str->length());
+    string sim = str->substr(index + 9, str->length()-2);
     data = new Data(sim, sign);
     if (sign == 1) {
       (*this->varName_data_map)[varName] = data;
     } else {
-      (*this->sim_data_map)[sim] = data;
+      (*this->sim_num_map)[sim] = data;
     }
   }
   (*this->str_command_map)[varName] = data;

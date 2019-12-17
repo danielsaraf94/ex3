@@ -19,6 +19,7 @@ OpenServerCommand::OpenServerCommand(map<string, Data *> *map) {
     std::cerr << "Could not create a socket" << std::endl;
     exit(1);
   }
+  initialSimToNumMap();
 }
 void OpenServerCommand::execute(string *str) {
   const char *portName = str->substr(1, str->length() - 2).c_str();
@@ -54,10 +55,46 @@ void OpenServerCommand::execute(string *str) {
   close(this->socketfd);
   //reading from client
   char buffer[1024] = {0};
-//  while(true){
-  //   std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  int valread = read(client_socket, buffer, 1024);
-  cout<<buffer<<endl;
-
-  // }
+  char *p = buffer;
+  while (true) {
+    this_thread::sleep_for(std::chrono::milliseconds(10));
+    int valread = read(client_socket, buffer, 1024);
+    readData(p);
+  }
+}
+void OpenServerCommand::readData(char *buffer) {
+  char *end = buffer;
+  for (int i = 0; i < 24; i++) {
+    if((*this->sim_table).find(this->numTosim[i])==this->sim_table->end()){
+      continue;
+    }
+    (*this->sim_table)[this->numTosim[i]]->setValue(strtod(end, &end));
+    end++;
+  }
+}
+void OpenServerCommand::initialSimToNumMap() {
+  this->numTosim[0] = "/instrumentation/airspeed-indicator/indicated-speed-kt";
+  this->numTosim[1] = "//instrumentation/heading-indicator/offset-deg";
+  this->numTosim[2] = "/instrumentation/altimeter/indicated-altitude-ft";
+  this->numTosim[3] = "/instrumentation/altimeter/pressure-alt-ft";
+  this->numTosim[4] = "/instrumentation/attitude-indicator/indicated-pitch-deg";
+  this->numTosim[5] = "/instrumentation/attitude-indicator/indicated-roll-deg";
+  this->numTosim[6] = "/instrumentation/attitude-indicator/internal-pitch-deg";
+  this->numTosim[7] = "/instrumentation/attitude-indicator/internal-roll-deg";
+  this->numTosim[8] = "/instrumentation/encoder/indicated-altitude-ft";
+  this->numTosim[9] = "/instrumentation/encoder/pressure-alt-ft";
+  this->numTosim[10] = "/instrumentation/gps/indicated-altitude-ft";
+  this->numTosim[11] = "/instrumentation/gps/indicated-ground-speed-kt";
+  this->numTosim[12] = "/instrumentation/gps/indicated-vertical-speed";
+  this->numTosim[13] = "/instrumentation/heading-indicator/indicated-heading-deg";
+  this->numTosim[14] = "/instrumentation/magnetic-compass/indicated-heading-deg";
+  this->numTosim[15] = "/instrumentation/slip-skid-ball/indicated-slip-skid";
+  this->numTosim[16] = "/instrumentation/turn-indicator/indicated-turn-rate";
+  this->numTosim[17] = "/instrumentation/vertical-speed-indicator/indicated-speed-fpm";
+  this->numTosim[18] = "/controls/flight/aileron";
+  this->numTosim[19] = "/controls/flight/elevator";
+  this->numTosim[20] = "/controls/flight/rudder";
+  this->numTosim[21] = "/controls/flight/flaps";
+  this->numTosim[22] = "/controls/engines/engine/throttle";
+  this->numTosim[23] = "/engines/engine/rpm";
 }

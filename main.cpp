@@ -27,7 +27,9 @@ void commandMapInit(map<string, Command *> *command_map, map<string, Data *> *sy
   // here we should initialize all of the commands object and assigned it to the map
   // strings and objects: openDataServer - OpenServerCommand, connectControlClient- ClientConnectCommand,
   // var - CreateVariableCommand , Print - PrintCommand, Sleep - SleepCommand, While/if/function/Condition parser
-
+  Command* open = new OpenServerCommand(sim_table);
+  string str = "(5400)";
+  open->execute(&str);
 
 
 }
