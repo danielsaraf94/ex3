@@ -35,12 +35,19 @@ void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map
   //Command *server = new OpenServerCommand(sim_table);
   //string str = "(5400)";
   //server->execute(&str);
+  // try to speak with the simulator - fail
   Command *client = new ClientConnectCommand(*symbol_table, *update_simulator_q);
   client->execute(new string("(\"127.0.0.1\",5402)"));
-  Data* d = new Data("/controls/flight/rudder",1);
-  symbol_table()=
-
-
+  Data *d = new Data("/controls/flight/rudder", 1);
+  d->setValue(1);
+  symbol_table->insert({string("rudder"), d});
+  update_simulator_q->push(string("rudder"));
+  sleep(1);
+  d->setValue(-1);
+  update_simulator_q->push(string("rudder"));
+  sleep(2);
+  d->setValue(1);
+  update_simulator_q->push(string("rudder"));
 
 }
 void parse(vector<string> &string_vec, unordered_map<string, Command *> &command_map) {
