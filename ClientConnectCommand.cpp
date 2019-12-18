@@ -1,12 +1,10 @@
 //
 // Created by daniels on 16/12/2019.
 //
-
-#include <cstring>
 #include "ClientConnectCommand.h"
 
-ClientConnectCommand::ClientConnectCommand(map<string, Data *> &s_t) : symbol_table(s_t) {
-
+ClientConnectCommand::ClientConnectCommand(unordered_map<string, Data *> &s_t, queue<string> &u_s_q)
+    : symbol_table(s_t), update_simulator_q(u_s_q) {
 }
 void ClientConnectCommand::execute(string *s) {
   extractAddressFromString(s);
@@ -35,7 +33,7 @@ void ClientConnectCommand::execute(string *s) {
   } else {
     std::cout << "Client is now connected to server" << std::endl;
   }
-
+  thread ct(updateServer, &to_close, &symbol_table, &update_simulator_q, &client_socket);
 }
 void ClientConnectCommand::extractAddressFromString(string *str) {
   string s = *str;
@@ -64,15 +62,31 @@ void ClientConnectCommand::extractAddressFromString(string *str) {
   port = s.substr(portStart, 4);
   ip = s.substr(ipStart, ipLen);
 }
-void ClientConnectCommand::updateServer(char s[]) {
-  int is_sent = send(client_socket, s, strlen(s), 0);
-  if (is_sent == -1) {
-    std::cout << "Error sending message" << std::endl;
-  } else {
-    std::cout << "Hello message sent to server" << std::endl;
+void ClientConnectCommand::updateServer(bool *to_close,
+                                        unordered_map<string, Data *> *symbol_table,
+                                        queue<string> *update_simulator_q,
+                                        int *client_socket) {
+  string var_name;
+  Data *var;
+  while (!(*to_close)) {
+    while (update_simulator_q->empty()) {}
+    var_name = update_simulator_q->front();
+    update_simulator_q->pop();
+    var = symbol_table->find(var_name)->second;
+    string s = "set " + var->getSim() + " " + to_string(var->getValue()) + "\r\n";
+    char c[s.length() + 1];
+    strcpy(c, s.c_str());
+    int is_sent = send(*client_socket, c, strlen(c), 0);
+    if (is_sent == -1) {
+      std::cout << "Error sending message" << std::endl;
+    } else {
+      std::cout << "message sent to server" << std::endl;
+    }
   }
+  close(*client_socket);
 }
 
 void ClientConnectCommand::closeClient() {
-  close(client_socket);
+  to_close = true;
 }
+

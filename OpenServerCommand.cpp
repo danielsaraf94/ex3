@@ -3,14 +3,7 @@
 //
 
 #include "OpenServerCommand.h"
-#include <sys/socket.h>
-#include <string>
-#include <iostream>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <chrono>
-#include <thread>
-OpenServerCommand::OpenServerCommand(map<string, Data *> *map) {
+OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map) {
   this->sim_table = map;
   //create socket
   this->socketfd = socket(AF_INET, SOCK_STREAM, 0);

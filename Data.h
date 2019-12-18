@@ -11,7 +11,7 @@ using namespace std;
 class Data : public Command {
   double value;
   string sim;
-  //represents the direction of the biding
+  //represents the direction of the biding, 1 : ->, 2: <- , 3: =
   int sign;
  public:
   Data(){};
@@ -19,6 +19,7 @@ class Data : public Command {
   virtual void execute(string*);
   void setValue(double);
   double getValue();
+  string getSim();
 
 };
 
