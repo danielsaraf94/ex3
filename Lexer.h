@@ -11,7 +11,8 @@ using namespace std;
 
 class Lexer {
   string file_name;
-  static bool isParenthesesOrBlank(char c);
+  static bool isParenthesesOrApos(char);
+  static bool isSpace(char);
  public:
   Lexer(string);
   bool lexer(vector<string>*);

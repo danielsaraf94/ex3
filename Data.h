@@ -10,16 +10,18 @@ using namespace std;
 
 class Data : public Command {
   double value;
+  string varName;
   string sim;
   //represents the direction of the biding, 1 : ->, 2: <- , 3: =
   int sign;
  public:
   Data(){};
-  Data(string, int);
+  Data(string,string, int);
   virtual void execute(string*);
   void setValue(double);
   double getValue();
   string getSim();
+  string getVarName();
 
 };
 

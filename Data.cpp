@@ -2,9 +2,10 @@
 
 #include "Data.h"
 
-Data::Data(string str, int biding) {
+Data::Data(string var, string simulator, int biding) {
   this->sign = biding;
-  this->sim = str;
+  this->varName = var;
+  this->sim = simulator;
 }
 void Data::execute(string *args) {
 
@@ -16,5 +17,8 @@ double Data::getValue() {
   return this->value;
 }
 string Data::getSim() {
-  return sim;
+  return this->sim;
+}
+string Data::getVarName() {
+  return this->varName;
 }

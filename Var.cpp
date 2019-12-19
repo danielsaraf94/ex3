@@ -16,11 +16,11 @@ void Var::execute(string *str) {
   if (sign == 3) {
     string otherVar = str->substr(index + 1, str->length());
     double value = (*this->varName_data_map)[otherVar]->getValue();
-    data = new Data("", sign);
+    data = new Data(varName,"", sign);
     data->setValue(value);
   } else {
     string sim = str->substr(index + 2, str->length());
-    data = new Data(sim, sign);
+    data = new Data(varName,sim, sign);
     if (sign == 1) {
       (*this->varName_data_map)[varName] = data;
     } else {
