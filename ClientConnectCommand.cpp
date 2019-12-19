@@ -3,7 +3,7 @@
 //
 #include "ClientConnectCommand.h"
 
-ClientConnectCommand::ClientConnectCommand(unordered_map<string, Data *> &s_t, queue<string> &u_s_q)
+ClientConnectCommand::ClientConnectCommand(unordered_map<string, Data *> *s_t, queue<string> *u_s_q)
     : symbol_table(s_t), update_simulator_q(u_s_q) {
 }
 void ClientConnectCommand::execute(string *s) {
@@ -33,7 +33,7 @@ void ClientConnectCommand::execute(string *s) {
   } else {
     std::cout << "Client is now connected to server" << std::endl;
   }
-  t = thread (updateServer, &to_close, &symbol_table, &update_simulator_q, &client_socket);
+  t = thread (updateServer, &to_close, symbol_table, update_simulator_q, &client_socket);
 
 }
 void ClientConnectCommand::extractAddressFromString(string *str) {

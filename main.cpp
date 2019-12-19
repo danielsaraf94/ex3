@@ -14,13 +14,13 @@ void commandMapInit(unordered_map<string, Command *> *,
                     unordered_map<string, Data *> *,
                     queue<string> *);
 int main(int argc, char *argv[]) {
-  queue<string> update_simulator_q;
   Lexer lex(argv[1]);
   vector<string> string_vec;
   if (!lex.lexer(&string_vec)) {
     cout << "error - can't open fly.txt" << endl;
     exit(1);
   }
+  queue<string> update_simulator_q;
   unordered_map<string, Command *> command_map;
   unordered_map<string, Data *> symbol_table;
   unordered_map<string, Data *> sim_table;
@@ -36,19 +36,19 @@ void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map
   //string str = "(5400)";
   //server->execute(&str);
   // try to speak with the simulator - fail
-  Command *client = new ClientConnectCommand(*symbol_table, *update_simulator_q);
+  Command *client = new ClientConnectCommand(symbol_table, update_simulator_q);
   client->execute(new string("(\"127.0.0.1\",5402)"));
   Data *d = new Data("/controls/flight/rudder", 1);
-  d->setValue(1);
+  d->setValue(0);
   symbol_table->insert({string("rudder"), d});
   update_simulator_q->push(string("rudder"));
-  sleep(1);
+  sleep(5);
   d->setValue(-1);
   update_simulator_q->push(string("rudder"));
-  sleep(2);
+  sleep(5);
   d->setValue(1);
   update_simulator_q->push(string("rudder"));
-
+  while(true){}
 }
 void parse(vector<string> &string_vec, unordered_map<string, Command *> &command_map) {
   for (int i = 0; i < string_vec.size(); i += 2) {

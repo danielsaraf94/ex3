@@ -25,14 +25,14 @@ using namespace std;
 class ClientConnectCommand : public Command {
   string ip;
   string port;
-  unordered_map<string, Data *> symbol_table;
-  queue<string> update_simulator_q;
+  unordered_map<string, Data *>* symbol_table;
+  queue<string>* update_simulator_q;
   sockaddr_in address;
   int client_socket;
   bool to_close = false;
  public:
   thread t;
-  ClientConnectCommand(unordered_map<string, Data *> &, queue<string> &);
+  ClientConnectCommand(unordered_map<string, Data *> *, queue<string> *);
   void execute(string *);
   void extractAddressFromString(string *);
   static void updateServer(bool*, unordered_map<string, Data *> *, queue<string> *, int *);
