@@ -41,7 +41,7 @@ void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map
   Command *client = new ClientConnectCommand(symbol_table, update_simulator_q, globals);
   (*command_map)[string("connectControlClient")]=client;
   Command *var_creator = new Var(command_map, symbol_table, sim_table);
-  (*command_map)[string("var ")]=var_creator;
+  (*command_map)[string("var")]=var_creator;
 }
 void parse(vector<string> &string_vec, unordered_map<string, Command *> &command_map) {
   for (int i = 0; i < string_vec.size(); i += 2) {

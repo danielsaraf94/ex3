@@ -2,8 +2,8 @@
 // Created by shlomo on 13/12/2019.
 //
 
-#ifndef EX3__VAR_H_
-#define EX3__VAR_H_
+#ifndef EX3_VAR_H
+#define EX3_VAR_H
 
 #include "Command.h"
 #include "iostream"
@@ -23,5 +23,4 @@ class Var : public Command {
   ~Var() {};
 };
 
-#endif //EX3__VAR_H_
-
+#endif //EX3_VAR_H

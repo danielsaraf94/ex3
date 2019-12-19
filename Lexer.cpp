@@ -24,15 +24,30 @@ bool Lexer::lexer(vector<string> *vector) {
       i = line.length();
     }
     if (j < i && j != -1) {
-      i = j+1;
+      i = j + 1;
     }
     string command = line.substr(0, i);
+    command.erase(std::remove_if(command.begin(), command.end(), &isParenthesesOrBlank), command.end());
     vector->push_back(command);
     if (i != line.length()) {
       string args = line.substr(i, line.length());
+      args.erase(std::remove_if(args.begin(), args.end(), &Lexer::isParenthesesOrBlank), args.end());
+      int simLoc = args.find("sim");
+      if(simLoc>-1){
+        args = args.substr(0,simLoc) + args.substr(simLoc+3);
+      }
       vector->push_back(args);
     }
   }
   input_file.close();
   return true;
+}
+bool Lexer::isParenthesesOrBlank(char c) {
+  switch (c) {
+    case '(':
+    case ')':
+    case ' ':
+    case '"':return true;
+    default:return false;
+  }
 }

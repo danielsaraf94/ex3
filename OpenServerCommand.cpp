@@ -16,7 +16,7 @@ OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map, Globals
   initialSimToNumMap();
 }
 void OpenServerCommand::execute(string *str) {
-  const char *portName = str->substr(1, str->length() - 2).c_str();
+  const char *portName = str->c_str();
   int port = atoi(portName);
   //bind socket to IP address
   // we first need to create the sockaddr obj.
