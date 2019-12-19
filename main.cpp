@@ -73,7 +73,10 @@ void parse(vector<string> &string_vec,
     if (c) {
       c->execute(&(string_vec[i + 1]));
     } else {
-      varAssign(string_vec[i], string_vec[i + 1], symbol_table, update_simulator_q);
+      if (symbol_table[string_vec[i]]) {
+        varAssign(string_vec[i], string_vec[i + 1], symbol_table, update_simulator_q);
+      }
+
     }
   }
   while (true) {}

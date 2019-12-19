@@ -13,6 +13,7 @@ class Lexer {
   string file_name;
   static bool isParenthesesOrApos(char);
   static bool isSpace(char);
+  int separationLoc(string&);
  public:
   Lexer(string);
   bool lexer(vector<string>*);
