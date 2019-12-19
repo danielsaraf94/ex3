@@ -19,6 +19,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <thread>
+#include "Globals.h"
 
 using namespace std;
 //

@@ -33,7 +33,7 @@ void ClientConnectCommand::execute(string *s) {
   } else {
     std::cout << "Client is now connected to server" << std::endl;
   }
-  t = thread (updateServer, &to_close, symbol_table, update_simulator_q, &client_socket);
+  t = thread(updateServer, &to_close, symbol_table, update_simulator_q, &client_socket);
 
 }
 void ClientConnectCommand::extractAddressFromString(string *str) {
@@ -69,12 +69,18 @@ void ClientConnectCommand::updateServer(bool *to_close,
                                         int *client_socket) {
   string var_name;
   Data *var;
-  cout<<"thread is runing";
+  bool is_q_empty = true;
   while (!(*to_close)) {
-    while (update_simulator_q->empty()) {}
+    while (is_q_empty) {
+      Globals::locker.lock();
+      if (!update_simulator_q->empty()) is_q_empty = false;
+      Globals::locker.unlock();
+    }
+    Globals::locker.lock();
     var_name = update_simulator_q->front();
     update_simulator_q->pop();
     var = symbol_table->find(var_name)->second;
+    Globals::locker.unlock();
     string s = "set " + var->getSim() + " " + to_string(var->getValue()) + "\r\n";
     char c[s.length() + 1];
     strcpy(c, s.c_str());
@@ -84,6 +90,7 @@ void ClientConnectCommand::updateServer(bool *to_close,
     } else {
       std::cout << "message sent to server" << std::endl;
     }
+    is_q_empty = true;
   }
   close(*client_socket);
 }

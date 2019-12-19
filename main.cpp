@@ -35,7 +35,7 @@ void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map
   //Command *server = new OpenServerCommand(sim_table);
   //string str = "(5400)";
   //server->execute(&str);
-  // try to speak with the simulator - fail
+
   Command *client = new ClientConnectCommand(symbol_table, update_simulator_q);
   client->execute(new string("(\"127.0.0.1\",5402)"));
   Data *d = new Data("/controls/flight/rudder", 1);
