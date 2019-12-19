@@ -10,7 +10,7 @@
 #include "PrintCommand.h"
 #include "Var.h"
 #include "SleepCommand.h"
-//
+
 using namespace std;
 void parse(vector<string> &, unordered_map<string, Command *> &);
 void commandMapInit(unordered_map<string, Command *> *,

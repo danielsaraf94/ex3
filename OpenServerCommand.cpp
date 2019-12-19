@@ -1,6 +1,6 @@
 //
 // Created by shlomo on 16/12/2019.
-//
+
 
 #include "OpenServerCommand.h"
 OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map, Globals *g) {
