@@ -7,9 +7,12 @@
 
 #include "Command.h"
 #include "iostream"
+#include <unistd.h>
 using namespace std;
 
 class SleepCommand : public Command {
-  void execute(string *);
+  void execute(string *s){
+    sleep(stoi(*s)/1000);
+  }
 };
 #endif //EX3_3__SLEEPCOMMAND_H_

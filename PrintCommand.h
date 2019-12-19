@@ -7,9 +7,10 @@
 
 #include "Command.h"
 #include "iostream"
+#include <unistd.h>"
 using namespace std;
 
 class PrintCommand : public Command {
-  void execute(string *);
+  void execute(string *s) { cout << *s << endl; }
 };
 #endif //EX3_3__PRINTCOMMAND_H_
