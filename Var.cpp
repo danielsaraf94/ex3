@@ -22,12 +22,10 @@ void Var::execute(string *str) {
   } else {
     string sim = str->substr(index + 3, str->length());
     data = new Data(sim, sign);
-    if (sign == 1) {
-      (*this->varName_data_map)[varName] = data;
-    } else {
+    if (sign != 1)
       (*this->sim_num_map)[sim] = data;
-    }
   }
+  (*this->varName_data_map)[varName] = data;
 }
 
 int Var::getSign(string *str, int *index) {

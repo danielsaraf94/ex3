@@ -20,6 +20,7 @@ class Data {
   void setValue(double);
   double getValue();
   string getSim();
+  int getSign() const;
 
 };
 

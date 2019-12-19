@@ -36,6 +36,7 @@ int main(int argc, char *argv[]) {
   unordered_map<string, Data *> sim_table;
   commandMapInit(&command_map, &symbol_table, &sim_table, &update_simulator_q, &g);
   parse(string_vec, command_map, symbol_table, update_simulator_q);
+  g.to_close = true;
 }
 void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map<string, Data *> *symbol_table,
                     unordered_map<string, Data *> *sim_table, queue<string> *update_simulator_q, Globals *globals) {
@@ -75,7 +76,7 @@ void parse(vector<string> &string_vec,
       varAssign(string_vec[i], string_vec[i + 1], symbol_table, update_simulator_q);
     }
   }
-  while(true){}
+  while (true) {}
 }
 void varAssign(string &varName, string &str, unordered_map<string, Data *> &symbol_table,
                queue<string> &update_simulator_q) {
@@ -84,7 +85,7 @@ void varAssign(string &varName, string &str, unordered_map<string, Data *> &symb
   double value = atof(s);
   if (value != -1 && op == '=') {
     symbol_table[varName]->setValue(value);
-    update_simulator_q.push(varName);
+    if (symbol_table[varName]->getSign() == 1)
+      update_simulator_q.push(varName);
   }
-
 }

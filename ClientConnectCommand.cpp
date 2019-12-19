@@ -3,8 +3,8 @@
 //
 #include "ClientConnectCommand.h"
 
-ClientConnectCommand::ClientConnectCommand(unordered_map<string, Data *> *s_t, queue<string> *u_s_q,Globals* g)
-    : symbol_table(s_t), update_simulator_q(u_s_q) ,glob(g){
+ClientConnectCommand::ClientConnectCommand(unordered_map<string, Data *> *s_t, queue<string> *u_s_q, Globals *g)
+    : symbol_table(s_t), update_simulator_q(u_s_q), glob(g) {
 }
 void ClientConnectCommand::execute(string *s) {
   extractAddressFromString(s);
@@ -35,7 +35,7 @@ void ClientConnectCommand::execute(string *s) {
   } else {
     std::cout << "connected succeeded" << std::endl;
   }
-  t = thread(updateServer, symbol_table, update_simulator_q, &client_socket,glob);
+  t = thread(updateServer, symbol_table, update_simulator_q, &client_socket, glob);
 
 }
 void ClientConnectCommand::extractAddressFromString(string *str) {
@@ -67,7 +67,7 @@ void ClientConnectCommand::extractAddressFromString(string *str) {
 }
 void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_table,
                                         queue<string> *update_simulator_q,
-                                        int *client_socket,Globals *g) {
+                                        int *client_socket, Globals *g) {
   string var_name;
   Data *var;
   bool is_q_empty = true;
@@ -88,8 +88,6 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
     int is_sent = send(*client_socket, c, strlen(c), 0);
     if (is_sent == -1) {
       std::cout << "Error sending message" << std::endl;
-    } else {
-      std::cout << "message sent to simulator" << std::endl;
     }
     is_q_empty = true;
   }

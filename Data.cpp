@@ -12,7 +12,12 @@ void Data::setValue(double val) {
 double Data::getValue() {
   return this->value;
 }
+int Data::getSign() const {
+  return sign;
+}
 string Data::getSim() {
   return this->sim;
 }
+
+
 
