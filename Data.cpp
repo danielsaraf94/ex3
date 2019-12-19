@@ -1,14 +1,11 @@
 
 #include "Data.h"
 
-Data::Data(string var, string simulator, int biding) {
+Data::Data(string str, int biding ){
   this->sign = biding;
-  this->varName = var;
-  this->sim = simulator;
+  this->sim = str;
 }
-void Data::execute(string *args) {
 
-}
 void Data::setValue(double val) {
   this->value = val;
 }
@@ -18,6 +15,4 @@ double Data::getValue() {
 string Data::getSim() {
   return this->sim;
 }
-string Data::getVarName() {
-  return this->varName;
-}
+

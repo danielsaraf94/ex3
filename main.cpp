@@ -12,7 +12,11 @@
 #include "SleepCommand.h"
 
 using namespace std;
-void parse(vector<string> &, unordered_map<string, Command *> &);
+void varAssign(string &, string &, unordered_map<string, Data *> &, queue<string> &update_simulator_q);
+void parse(vector<string> &,
+           unordered_map<string, Command *> &,
+           unordered_map<string, Data *> &,
+           queue<string> &update_simulator_q);
 void commandMapInit(unordered_map<string, Command *> *,
                     unordered_map<string, Data *> *,
                     unordered_map<string, Data *> *,
@@ -31,30 +35,55 @@ int main(int argc, char *argv[]) {
   unordered_map<string, Data *> symbol_table;
   unordered_map<string, Data *> sim_table;
   commandMapInit(&command_map, &symbol_table, &sim_table, &update_simulator_q, &g);
-  parse(string_vec, command_map);
+  parse(string_vec, command_map, symbol_table, update_simulator_q);
 }
 void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map<string, Data *> *symbol_table,
                     unordered_map<string, Data *> *sim_table, queue<string> *update_simulator_q, Globals *globals) {
   // here we should initialize all of the commands object and assigned it to the map
   // strings and objects: openDataServer - OpenServerCommand, connectControlClient- ClientConnectCommand,
   // var - CreateVariableCommand , Print - PrintCommand, Sleep - SleepCommand, While/if/function/Condition parser
+
   Command *server = new OpenServerCommand(sim_table, globals);
+
   (*command_map)[string("openDataServer")] = server;
+
   Command *client = new ClientConnectCommand(symbol_table, update_simulator_q, globals);
+
   (*command_map)[string("connectControlClient")] = client;
-  Command *var_creator = new Var(command_map, symbol_table, sim_table);
+
+  Command *var_creator = new Var(symbol_table, sim_table);
+
   (*command_map)[string("var")] = var_creator;
+
   Command *print = new PrintCommand();
+
   (*command_map)[string("Print")] = print;
+
   Command *sleep = new SleepCommand();
+
   (*command_map)[string("Sleep")] = sleep;
 
 }
-void parse(vector<string> &string_vec, unordered_map<string, Command *> &command_map) {
+void parse(vector<string> &string_vec,
+           unordered_map<string, Command *> &command_map,
+           unordered_map<string, Data *> &symbol_table, queue<string> &update_simulator_q) {
   for (int i = 0; i < string_vec.size(); i += 2) {
     Command *c = command_map[string_vec[i]];
     if (c) {
       c->execute(&(string_vec[i + 1]));
+    } else {
+      varAssign(string_vec[i], string_vec[i + 1], symbol_table, update_simulator_q);
     }
   }
+}
+void varAssign(string &varName, string &str, unordered_map<string, Data *> &symbol_table,
+               queue<string> &update_simulator_q) {
+  char op = str[0];
+  const char *s = str.substr(1).c_str();
+  double value = atof(s);
+  if (value != -1 && op == '=') {
+    symbol_table[varName]->setValue(value);
+    update_simulator_q.push(varName);
+  }
+
 }

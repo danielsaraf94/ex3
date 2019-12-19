@@ -6,22 +6,20 @@
 #define EX3_CMAKE_BUILD_DEBUG_DATA_H_
 #include "Command.h"
 #include "iostream"
+#include "queue"
 using namespace std;
 
-class Data : public Command {
+class Data {
   double value;
-  string varName;
   string sim;
   //represents the direction of the biding, 1 : ->, 2: <- , 3: =
   int sign;
  public:
   Data(){};
-  Data(string,string, int);
-  virtual void execute(string*);
+  Data(string, int);
   void setValue(double);
   double getValue();
   string getSim();
-  string getVarName();
 
 };
 
