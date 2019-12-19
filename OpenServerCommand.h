@@ -10,7 +10,6 @@
 
 class OpenServerCommand : public Command {
   int socketfd;
-  double array[1024];
   map<int, string> numTosim;
   map<string, Data *> *sim_table;
  public:

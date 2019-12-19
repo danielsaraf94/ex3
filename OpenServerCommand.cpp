@@ -8,6 +8,7 @@
 #include <iostream>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <algorithm>
 #include <chrono>
 #include <thread>
 OpenServerCommand::OpenServerCommand(map<string, Data *> *map) {
@@ -21,8 +22,9 @@ OpenServerCommand::OpenServerCommand(map<string, Data *> *map) {
   }
   initialSimToNumMap();
 }
-void OpenServerCommand::execute(string *str) {
-  const char *portName = str->substr(1, str->length() - 2).c_str();
+
+void OpenServerCommand::execute(string* str) {
+  const char *portName = str->c_str();
   int port = atoi(portName);
   //bind socket to IP address
   // we first need to create the sockaddr obj.
