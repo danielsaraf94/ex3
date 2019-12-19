@@ -14,18 +14,21 @@
 #include <unistd.h>
 #include <chrono>
 #include <thread>
+#include "Globals.h"
+
 
 class OpenServerCommand : public Command {
   int socketfd;
   double array[1024];
  unordered_map<int, string> numTosim;
  unordered_map<string, Data *> *sim_table;
+ Globals* glob;
  public:
-  OpenServerCommand(unordered_map<string, Data *> *map);
+  thread t;
+  OpenServerCommand(unordered_map<string, Data *> *map,Globals*);
   void initialSimToNumMap();
-  void readData(char *buffer);
   void execute(string *);
-
+  static void readFromClient(int,int,Globals*, unordered_map<string, Data *> *, unordered_map<int, string> *);
 };
 
 #endif //EX3__OPENSERVERCOMMAND_H_

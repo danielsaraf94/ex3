@@ -3,8 +3,8 @@
 //
 #include "ClientConnectCommand.h"
 
-ClientConnectCommand::ClientConnectCommand(unordered_map<string, Data *> *s_t, queue<string> *u_s_q)
-    : symbol_table(s_t), update_simulator_q(u_s_q) {
+ClientConnectCommand::ClientConnectCommand(unordered_map<string, Data *> *s_t, queue<string> *u_s_q,Globals* g)
+    : symbol_table(s_t), update_simulator_q(u_s_q) ,glob(g){
 }
 void ClientConnectCommand::execute(string *s) {
   extractAddressFromString(s);
@@ -25,15 +25,17 @@ void ClientConnectCommand::execute(string *s) {
   //we need to convert our number (both port & localhost)
   // to a number that the network understands
 
+
   // Requesting a connection with the server on local host with port
+  std::cout << "try to connect to simulator" << std::endl;
   int is_connect = connect(client_socket, (struct sockaddr *) &address, sizeof(address));
   if (is_connect == -1) {
-    std::cerr << "Could not connect to host server" << std::endl;
+    std::cerr << "connected failed" << std::endl;
     exit(2);
   } else {
-    std::cout << "Client is now connected to server" << std::endl;
+    std::cout << "connected succeeded" << std::endl;
   }
-  t = thread(updateServer, &to_close, symbol_table, update_simulator_q, &client_socket);
+  t = thread(updateServer, symbol_table, update_simulator_q, &client_socket,glob);
 
 }
 void ClientConnectCommand::extractAddressFromString(string *str) {
@@ -63,24 +65,23 @@ void ClientConnectCommand::extractAddressFromString(string *str) {
   port = s.substr(portStart, 4);
   ip = s.substr(ipStart, ipLen);
 }
-void ClientConnectCommand::updateServer(bool *to_close,
-                                        unordered_map<string, Data *> *symbol_table,
+void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_table,
                                         queue<string> *update_simulator_q,
-                                        int *client_socket) {
+                                        int *client_socket,Globals *g) {
   string var_name;
   Data *var;
   bool is_q_empty = true;
-  while (!(*to_close)) {
+  while (!(g->to_close)) {
     while (is_q_empty) {
-      Globals::locker.lock();
+      g->locker.lock();
       if (!update_simulator_q->empty()) is_q_empty = false;
-      Globals::locker.unlock();
+      g->locker.unlock();
     }
-    Globals::locker.lock();
+    g->locker.lock();
     var_name = update_simulator_q->front();
     update_simulator_q->pop();
     var = symbol_table->find(var_name)->second;
-    Globals::locker.unlock();
+    g->locker.unlock();
     string s = "set " + var->getSim() + " " + to_string(var->getValue()) + "\r\n";
     char c[s.length() + 1];
     strcpy(c, s.c_str());
@@ -88,14 +89,10 @@ void ClientConnectCommand::updateServer(bool *to_close,
     if (is_sent == -1) {
       std::cout << "Error sending message" << std::endl;
     } else {
-      std::cout << "message sent to server" << std::endl;
+      std::cout << "message sent to simulator" << std::endl;
     }
     is_q_empty = true;
   }
   close(*client_socket);
-}
-
-void ClientConnectCommand::closeClient() {
-  to_close = true;
 }
 

@@ -8,6 +8,7 @@
 using namespace std;
 class Globals {
  public:
-  static mutex locker;
+  mutex locker;
+  bool to_close;
 };
 #endif //EX3_3__GLOBALS_H_
