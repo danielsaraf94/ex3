@@ -3,7 +3,7 @@
 //
 
 #include "Var.h"
-Var::Var(map<string, Command *> *map1, map<string, Data *> *map2, map<string,Data*> *map3) {
+Var::Var(unordered_map<string, Command* > *map1, unordered_map<string, Data *> *map2, unordered_map<string,Data*> *map3) {
   this->str_command_map = map1;
   this->varName_data_map = map2;
   this->sim_num_map = map3;

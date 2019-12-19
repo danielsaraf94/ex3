@@ -3,15 +3,8 @@
 //
 
 #include "OpenServerCommand.h"
-#include <sys/socket.h>
-#include <string>
-#include <iostream>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <algorithm>
-#include <chrono>
-#include <thread>
-OpenServerCommand::OpenServerCommand(map<string, Data *> *map) {
+OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map, Globals *g) {
+  glob = g;
   this->sim_table = map;
   //create socket
   this->socketfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -22,8 +15,7 @@ OpenServerCommand::OpenServerCommand(map<string, Data *> *map) {
   }
   initialSimToNumMap();
 }
-
-void OpenServerCommand::execute(string* str) {
+void OpenServerCommand::execute(string *str) {
   const char *portName = str->c_str();
   int port = atoi(portName);
   //bind socket to IP address
@@ -46,34 +38,18 @@ void OpenServerCommand::execute(string* str) {
     cerr << "Error during listening command" << endl;
     exit(1);
   } else {
-    cout << "Server is now listening ..." << endl;
+    cout << "waiting for simulator to connect" << endl;
   }
   int client_socket = accept(this->socketfd, (struct sockaddr *) &address,
                              (socklen_t *) &address);
   if (client_socket == -1) {
-    cerr << "Error accepting client" << endl;
+    cerr << "error accepting client" << endl;
     exit(1);
   }
-  close(this->socketfd);
-  //reading from client
-  char buffer[1024] = {0};
-  char *p = buffer;
-  while (true) {
-    this_thread::sleep_for(std::chrono::milliseconds(10));
-    int valread = read(client_socket, buffer, 1024);
-    readData(p);
-  }
+  cout << "simulator connected" << endl;
+  t = thread(readFromClient, client_socket, this->socketfd, glob, sim_table, &numTosim);
 }
-void OpenServerCommand::readData(char *buffer) {
-  char *end = buffer;
-  for (int i = 0; i < 24; i++) {
-    if((*this->sim_table).find(this->numTosim[i])==this->sim_table->end()){
-      continue;
-    }
-    (*this->sim_table)[this->numTosim[i]]->setValue(strtod(end, &end));
-    end++;
-  }
-}
+
 void OpenServerCommand::initialSimToNumMap() {
   this->numTosim[0] = "/instrumentation/airspeed-indicator/indicated-speed-kt";
   this->numTosim[1] = "//instrumentation/heading-indicator/offset-deg";
@@ -99,4 +75,32 @@ void OpenServerCommand::initialSimToNumMap() {
   this->numTosim[21] = "/controls/flight/flaps";
   this->numTosim[22] = "/controls/engines/engine/throttle";
   this->numTosim[23] = "/engines/engine/rpm";
+}
+
+void OpenServerCommand::readFromClient(int client_socket,
+                                       int server_socket,
+                                       Globals *glob,
+                                       unordered_map<string, Data *> *sim_table,
+                                       unordered_map<int, string> *numTosim) {
+
+  char buffer[1024] = {0};
+  char *p = buffer;
+  while (!glob->to_close) {
+    this_thread::sleep_for(std::chrono::milliseconds(10));
+    int valread = read(client_socket, buffer, 1024);
+    char *end = buffer;
+    for (int i = 0; i < 24; i++) {
+      glob->locker.lock();
+      if (sim_table->find((*numTosim)[i]) == sim_table->end()) {
+        glob->locker.unlock();
+        strtod(end, &end);
+        end++;
+        continue;
+      }
+      (*sim_table)[(*numTosim)[i]]->setValue(strtod(end, &end));
+      glob->locker.unlock();
+      end++;
+    }
+  }
+  close(server_socket);
 }

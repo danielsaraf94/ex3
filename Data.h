@@ -1,6 +1,6 @@
 //
 // Created by shlomo on 13/12/2019.
-//
+
 
 #ifndef EX3_CMAKE_BUILD_DEBUG_DATA_H_
 #define EX3_CMAKE_BUILD_DEBUG_DATA_H_
@@ -11,7 +11,7 @@ using namespace std;
 class Data : public Command {
   double value;
   string sim;
-  //represents the direction of the biding
+  //represents the direction of the biding, 1 : ->, 2: <- , 3: =
   int sign;
  public:
   Data(){};
@@ -19,6 +19,7 @@ class Data : public Command {
   virtual void execute(string*);
   void setValue(double);
   double getValue();
+  string getSim();
 
 };
 

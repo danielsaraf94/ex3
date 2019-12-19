@@ -5,19 +5,30 @@
 #ifndef EX3__OPENSERVERCOMMAND_H_
 #define EX3__OPENSERVERCOMMAND_H_
 #include "Command.h"
-#include "map"
+#include "unordered_map"
 #include "Data.h"
+#include <sys/socket.h>
+#include <string>
+#include <iostream>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <chrono>
+#include <thread>
+#include "Globals.h"
+//
 
 class OpenServerCommand : public Command {
   int socketfd;
-  map<int, string> numTosim;
-  map<string, Data *> *sim_table;
+  double array[1024];
+ unordered_map<int, string> numTosim;
+ unordered_map<string, Data *> *sim_table;
+ Globals* glob;
  public:
-  OpenServerCommand(map<string, Data *> *map);
+  thread t;
+  OpenServerCommand(unordered_map<string, Data *> *map,Globals*);
   void initialSimToNumMap();
-  void readData(char *buffer);
   void execute(string *);
-
+  static void readFromClient(int,int,Globals*, unordered_map<string, Data *> *, unordered_map<int, string> *);
 };
 
 #endif //EX3__OPENSERVERCOMMAND_H_
