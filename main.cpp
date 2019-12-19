@@ -7,7 +7,9 @@
 #include <queue>
 #include "ClientConnectCommand.h"
 #include "Globals.h"
+#include "PrintCommand.h"
 #include "Var.h"
+#include "SleepCommand.h"
 //
 using namespace std;
 void parse(vector<string> &, unordered_map<string, Command *> &);
@@ -36,12 +38,17 @@ void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map
   // here we should initialize all of the commands object and assigned it to the map
   // strings and objects: openDataServer - OpenServerCommand, connectControlClient- ClientConnectCommand,
   // var - CreateVariableCommand , Print - PrintCommand, Sleep - SleepCommand, While/if/function/Condition parser
-  Command *server = new OpenServerCommand(sim_table,globals);
-  (*command_map)[string("openDataServer")]=server;
+  Command *server = new OpenServerCommand(sim_table, globals);
+  (*command_map)[string("openDataServer")] = server;
   Command *client = new ClientConnectCommand(symbol_table, update_simulator_q, globals);
-  (*command_map)[string("connectControlClient")]=client;
+  (*command_map)[string("connectControlClient")] = client;
   Command *var_creator = new Var(command_map, symbol_table, sim_table);
-  (*command_map)[string("var")]=var_creator;
+  (*command_map)[string("var")] = var_creator;
+  Command *print = new PrintCommand();
+  (*command_map)[string("Print")] = print;
+  Command *sleep = new SleepCommand();
+  (*command_map)[string("Sleep")] = sleep;
+
 }
 void parse(vector<string> &string_vec, unordered_map<string, Command *> &command_map) {
   for (int i = 0; i < string_vec.size(); i += 2) {
