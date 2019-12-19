@@ -75,6 +75,7 @@ void parse(vector<string> &string_vec,
       varAssign(string_vec[i], string_vec[i + 1], symbol_table, update_simulator_q);
     }
   }
+  while(true){}
 }
 void varAssign(string &varName, string &str, unordered_map<string, Data *> &symbol_table,
                queue<string> &update_simulator_q) {
