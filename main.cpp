@@ -56,7 +56,7 @@ void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map
 
   (*command_map)[string("var")] = var_creator;
 
-  Command *print = new PrintCommand();
+  Command *print = new PrintCommand(symbol_table);
 
   (*command_map)[string("Print")] = print;
 

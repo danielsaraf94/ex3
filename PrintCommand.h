@@ -7,9 +7,15 @@
 #include "Command.h"
 #include "iostream"
 #include <unistd.h>"
+#include "unordered_map"
+#include "Data.h"
 using namespace std;
 
 class PrintCommand : public Command {
-  void execute(string *s) { cout << *s << endl; }
+  unordered_map<string, Data *> *symbol_table;
+  void execute(string *s);
+ public:
+  PrintCommand(unordered_map<string, Data *> *s) : symbol_table(s) {}
+
 };
 #endif //EX3_3__PRINTCOMMAND_H_

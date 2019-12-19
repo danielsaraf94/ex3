@@ -20,7 +20,7 @@ void Var::execute(string *str) {
     data = new Data("", sign);
     data->setValue(value);
   } else {
-    string sim = str->substr(index + 3, str->length());
+    string sim = str->substr(index + 2, str->length());
     data = new Data(sim, sign);
     if (sign != 1)
       (*this->sim_num_map)[sim] = data;

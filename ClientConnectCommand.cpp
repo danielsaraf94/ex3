@@ -82,6 +82,7 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
     update_simulator_q->pop();
     var = symbol_table->find(var_name)->second;
     g->locker.unlock();
+    string sim = var->getSim().substr(1, var->getSim().length());
     string s = "set " + var->getSim() + " " + to_string(var->getValue()) + "\r\n";
     char c[s.length() + 1];
     strcpy(c, s.c_str());
