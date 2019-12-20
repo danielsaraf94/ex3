@@ -4,40 +4,41 @@
 
 #include <regex>
 #include "ConditionParser.h"
-#include "regex"
-ConditionParser::ConditionParser(unordered_map<string, Command *> *map1, unordered_map<string, Data *>* map2) {
+ConditionParser::ConditionParser(unordered_map<string, Command *> *map1, unordered_map<string, Data *> *map2) {
   this->command_map = map1;
-  this->symbol_table=map2;
+  this->symbol_table = map2;
 }
 
-int ConditionParser::exectue(vector<string> *string_vec, int i) {
+int ConditionParser::execute(vector<string> *string_vec, int i) {
   int return_index = returnIndex(string_vec, i)-i;
   if (isTrue((*string_vec)[i])) {
     while (i != return_index - 1) {
-      Command* c = (*command_map)[(*string_vec)[i]];
-      i+=c->execute(string_vec,i+1);
+      Command *c = (*command_map)[(*string_vec)[i]];
+      i += c->execute(string_vec, i + 1);
     }
   }
   return return_index;
 }
 
 int ConditionParser::returnIndex(vector<string> *string_vec, int i) {
+
   while ((*string_vec)[i].find("{") == -1) {
     i++;
   }
-  this->string_queue.push("{");
-  while (this->string_queue.empty() == false) {
+  this->q.push("{");
+  i++;
+  while (!this->q.empty()) {
     if ((*string_vec)[i].find("{") != -1) {
-      this->string_queue.push("{");
+      this->q.push("{");
     }
     if ((*string_vec)[i].find("}") != -1) {
-      this->string_queue.pop();
+      this->q.pop();
     }
     i++;
   }
   return i;
 }
-bool :: ConditionParser::isTrue(string s) {
+bool ::ConditionParser::isTrue(string s) {
   string left, right, oper;
   double l, r;
   int i = 0, len = 0;
@@ -50,8 +51,11 @@ bool :: ConditionParser::isTrue(string s) {
   i = len;
   right = s.substr(i, s.length() - i);
   left.erase(remove(left.begin(), left.end(), ' '), left.end());
+  left.erase(remove(left.begin(), left.end(), '('), left.end());
   oper.erase(remove(oper.begin(), oper.end(), ' '), oper.end());
   right.erase(remove(right.begin(), right.end(), ' '), right.end());
+  right.erase(remove(right.begin(), right.end(), ')'), right.end());
+  right.erase(remove(right.begin(), right.end(), '{'), right.end());
   regex rg("^[-+]?[0-9]+(\\.[0-9]+)?$");
   if (regex_match(left.begin(), left.end(), rg))
     l = stod(left);

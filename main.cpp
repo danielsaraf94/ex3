@@ -10,6 +10,9 @@
 #include "PrintCommand.h"
 #include "Var.h"
 #include "SleepCommand.h"
+#include <algorithm>
+#include <regex>
+#include "ConditionParser.h"
 
 using namespace std;
 void varAssign(string &, string &, unordered_map<string, Data *> &, queue<string> &update_simulator_q);
@@ -64,6 +67,10 @@ void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map
 
   (*command_map)[string("Sleep")] = sleep;
 
+  Command *conPar = new ConditionParser(command_map,symbol_table);
+
+  (*command_map)[string("if")] = conPar;
+
 }
 void parse(vector<string> &string_vec,
            unordered_map<string, Command *> &command_map,
@@ -71,11 +78,11 @@ void parse(vector<string> &string_vec,
   for (int i = 0; i < string_vec.size();) {
     Command *c = command_map[string_vec[i]];
     if (c) {
-      i += c->execute(&string_vec,i+1);
+      i += c->execute(&string_vec, i + 1);
     } else {
       if (symbol_table[string_vec[i]]) {
         varAssign(string_vec[i], string_vec[i + 1], symbol_table, update_simulator_q);
-        i+=2;
+        i += 2;
       }
 
     }

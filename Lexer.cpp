@@ -18,6 +18,9 @@ bool Lexer::lexer(vector<string> *vector) {
   }
   string line;
   while (getline(input_file, line)) {
+    if(line==""){
+      continue;
+    }
     int i = separationLoc(line);
     string command = line.substr(0, i);
     command.erase(std::remove_if(command.begin(), command.end(), &isParenthesesOrApos), command.end());
