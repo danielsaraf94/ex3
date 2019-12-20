@@ -16,12 +16,12 @@
 #include "PrintCommand.h"
 #include "Var.h"
 #include "SleepCommand.h"
-
+#include "ConditionParser.h"
 
 class WhileCommand : public Command {
   unordered_map<string, Command *> * c_m;
   unordered_map<string, Data *> * s_t;
-  bool checkCondition(string);
+  bool isTrue(string);
  public:
   WhileCommand(unordered_map<string, Command *> *, unordered_map<string, Data *> *);
   int execute(vector<string> *,int);
