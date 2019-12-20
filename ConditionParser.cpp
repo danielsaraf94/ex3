@@ -11,7 +11,7 @@ ConditionParser::ConditionParser(unordered_map<string, Command *> *map1, unorder
 }
 
 int ConditionParser::exectue(vector<string> *string_vec, int i) {
-  int return_index = returnIndex(string_vec, i);
+  int return_index = returnIndex(string_vec, i)-i;
   if (isTrue((*string_vec)[i])) {
     while (i != return_index - 1) {
       Command* c = (*command_map)[(*string_vec)[i]];
@@ -25,13 +25,13 @@ int ConditionParser::returnIndex(vector<string> *string_vec, int i) {
   while ((*string_vec)[i].find("{") == -1) {
     i++;
   }
-  this->queue.push("{");
-  while (this->queue.empty() == false) {
+  this->string_queue.push("{");
+  while (this->string_queue.empty() == false) {
     if ((*string_vec)[i].find("{") != -1) {
-      this->queue.push("{");
+      this->string_queue.push("{");
     }
     if ((*string_vec)[i].find("}") != -1) {
-      this->queue.pop();
+      this->string_queue.pop();
     }
     i++;
   }

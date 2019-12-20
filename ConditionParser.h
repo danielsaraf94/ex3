@@ -13,7 +13,7 @@
 class ConditionParser: public Command {
   unordered_map<string, Data *> *symbol_table;
   unordered_map<string, Command *> *command_map;
-  queue<string> queue;
+  queue<string> string_queue;
  public:
   ConditionParser(unordered_map<string, Command *>*,unordered_map<string, Data *>*);
   bool isTrue(string);
