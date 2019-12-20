@@ -9,8 +9,8 @@ ConditionParser::ConditionParser(unordered_map<string, Command *> *map1, unorder
   this->symbol_table = map2;
 }
 
-int ConditionParser::exectue(vector<string> *string_vec, int i) {
-  int return_index = returnIndex(string_vec, i);
+int ConditionParser::execute(vector<string> *string_vec, int i) {
+  int return_index = returnIndex(string_vec, i)-i;
   if (isTrue((*string_vec)[i])) {
     while (i != return_index - 1) {
       Command *c = (*command_map)[(*string_vec)[i]];
@@ -26,6 +26,7 @@ int ConditionParser::returnIndex(vector<string> *string_vec, int i) {
     i++;
   }
   this->q.push("{");
+  i++;
   while (!this->q.empty()) {
     if ((*string_vec)[i].find("{") != -1) {
       this->q.push("{");

@@ -17,7 +17,7 @@ class ConditionParser: public Command {
  public:
   ConditionParser(unordered_map<string, Command *>*,unordered_map<string, Data *>*);
   bool isTrue(string);
-  int exectue(vector<string>*,int i);
+  int execute(vector<string>*,int i);
   int returnIndex(vector<string>*,int);
 };
 
