@@ -29,7 +29,7 @@ int Data::execute(vector<string> *string_vec, int j) {
     string expression = str.substr(1);
     double newValue = interpreter->interpret(expression)->calculate();
     setValue(newValue);
-  }catch (char* e){
+  }catch (...){
     cerr<<"Something went wrong with the interpretation"<<endl;
   }
   return 2;
