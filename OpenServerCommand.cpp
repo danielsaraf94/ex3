@@ -3,6 +3,7 @@
 
 
 #include "OpenServerCommand.h"
+#include "ex1.h"
 OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map, Globals *g) {
   glob = g;
   this->sim_table = map;
@@ -16,8 +17,8 @@ OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map, Globals
   initialSimToNumMap();
 }
 int OpenServerCommand::execute(vector<string>* string_vec,int i) {
-  const char *portName = (*string_vec)[i].c_str();
-  int port = atoi(portName);
+  Interpreter interpreter;
+  double port = interpreter.interpret((*string_vec)[i])->calculate();
   //bind socket to IP address
   // we first need to create the sockaddr obj.
   sockaddr_in address; //in means IP4

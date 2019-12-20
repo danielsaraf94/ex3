@@ -11,7 +11,7 @@ Data::Data(string var, string simulator, int biding, queue<string> *queue,unorde
 int Data::execute(vector<string> *string_vec, int j) {
   string str = (*string_vec)[j];
   int i = 0,l=0;
-  Interpreter* interpreter = new Interpreter();
+  Interpreter interpreter;
   while(i<=str.length()){
     i = getIndexAfterOp(str,l);
     l= getIndexBeforeOp(str,i);
@@ -22,12 +22,12 @@ int Data::execute(vector<string> *string_vec, int j) {
     }
     Data* data=(*this->symbol_table)[varName];
     string value = std::to_string(data->getValue());
-    interpreter->setVariables(varName+"="+value);
+    interpreter.setVariables(varName+"="+value);
     i=l+1;
   }
   try{
     string expression = str.substr(1);
-    double newValue = interpreter->interpret(expression)->calculate();
+    double newValue = interpreter.interpret(expression)->calculate();
     setValue(newValue);
   }catch (...){
     cerr<<"Something went wrong with the interpretation"<<endl;
