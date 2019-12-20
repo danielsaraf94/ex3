@@ -68,10 +68,10 @@ void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map
 void parse(vector<string> &string_vec,
            unordered_map<string, Command *> &command_map,
            unordered_map<string, Data *> &symbol_table, queue<string> &update_simulator_q) {
-  for (int i = 0; i < string_vec.size(); i += 2) {
+  for (int i = 0; i < string_vec.size();) {
     Command *c = command_map[string_vec[i]];
     if (c) {
-      c->execute(&(string_vec[i + 1]));
+      i += c->execute(&string_vec,i);
     } else {
       if (symbol_table[string_vec[i]]) {
         varAssign(string_vec[i], string_vec[i + 1], symbol_table, update_simulator_q);
