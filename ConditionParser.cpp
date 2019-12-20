@@ -10,14 +10,16 @@ ConditionParser::ConditionParser(unordered_map<string, Command *> *map1, unorder
 }
 
 int ConditionParser::execute(vector<string> *string_vec, int i) {
-  int return_index = returnIndex(string_vec, i)-i;
+  int return_index = returnIndex(string_vec, i) - i;
+  int first_index = i - 1;
   if (isTrue((*string_vec)[i])) {
-    while (i != return_index - 1) {
+    i++;
+    while (i < first_index + return_index - 1) {
       Command *c = (*command_map)[(*string_vec)[i]];
       i += c->execute(string_vec, i + 1);
     }
   }
-  return return_index;
+  return return_index + 1;
 }
 
 int ConditionParser::returnIndex(vector<string> *string_vec, int i) {
