@@ -21,9 +21,10 @@
 class WhileCommand : public Command {
   unordered_map<string, Command *> * c_m;
   unordered_map<string, Data *> * s_t;
-  int execute(vector<string> *,int);
+  bool checkCondition(string);
  public:
   WhileCommand(unordered_map<string, Command *> *, unordered_map<string, Data *> *);
+  int execute(vector<string> *,int);
 };
 
 #endif //EX3_3__WHILECOMMAND_H_
