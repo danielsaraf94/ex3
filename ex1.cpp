@@ -1,517 +1,373 @@
+//
+// Created by daniels on 07/11/2019.
+//
 #include "ex1.h"
-//
-// Created by shlomo on 04/11/2019.
-//
 
-/*
- * the Variable constructor
- * param name - the name of the variable.
- * param value - the value of of the variable
- */
-Variable::Variable(string str, double val) {
-  this->name = str;
-  this->value = val;
+double Value::calculate() {
+  return val;
 }
-/*
- * operator overloading in Variable class
- */
-Variable &Variable::operator++(int) {
-  ++*this;
-  return *this;
-}
-/*
- * operator overloading in Variable class
- */
+
 Variable &Variable::operator++() {
-  ++(this->value);
+  value++;
   return *this;
 }
-/*
- * operator overloading in Variable class
- */
-Variable &Variable::operator--(int) {
-  --*this;
+
+Variable &Variable::operator++(int) {
+  value++;
   return *this;
 }
+
 Variable &Variable::operator--() {
-  --(this->value);
+  value--;
   return *this;
 }
-/*
- * operator overloading in Variable class
- */
-Variable &Variable::operator+=(double val) {
-  this->value = this->value + val;
+
+Variable &Variable::operator--(int) {
+  value--;
   return *this;
 }
-/*
- * operator overloading in Variable class
- */
-Variable &Variable::operator-=(double val) {
-  this->value = this->value - val;
+
+Variable &Variable::operator+=(double v) {
+  value += v;
   return *this;
 }
-/*
- * Calculate return the value of the varibale
- */
+
+Variable &Variable::operator-=(double v) {
+  value -= v;
+  return *this;
+}
+
 double Variable::calculate() {
   return value;
 }
-/*
- * Variable destructor
- */
-Variable::~Variable() {
 
+string Variable::getName() {
+  return name;
 }
-/*
- * the Value constructor
- * param value - the value
- */
-Value::Value(double val) {
-  this->value = val;
-}
-/*
- * Calculate return the value.
- */
-double Value::calculate() {
-  return this->value;
-}
-/*
- * value destructor
- */
-Value::~Value() {}
-/*
- * the UnaryOperator constructor
- * param exp - pointer to the inner class
- */
-UnaryOperator::UnaryOperator(Expression *expression) {
-  this->exp = expression;
-}
-/*
- * Unaryoperator destructor
- */
-UnaryOperator::~UnaryOperator() {
-  if (this->exp != NULL) {
-    delete this->exp;
-  }
-}
-/*
- * the BinaryOperator constructor
- * param left - pointer to the inner class
- * param right - pointer to the inner class
- */
-BinaryOperator::BinaryOperator(Expression *l, Expression *r) {
-  this->left = l;
-  this->right = r;
-}
-/*
- * BinaryOperator destructor
- */
-BinaryOperator::~BinaryOperator() {
-  if (this->right != NULL) {
-    delete this->right;
-  }
-  if (this->left != NULL) {
-    delete this->left;
-  }
-}
-/*
- * the Uplus constructor
- * param exp - pointer to the inner class
- */
-UPlus::UPlus(Expression *expression) : UnaryOperator(expression) {}
-UPlus::~UPlus() {}
 
-double UPlus::calculate() {
-  return this->exp->calculate();
+double Variable::getValue() const {
+  return value;
 }
-/*
- * the Uminus constructor
- * param exp - pointer to the inner class
- */
-UMinus::UMinus(Expression *expression) : UnaryOperator(expression) {}
-UMinus::~UMinus() {}
-double UMinus::calculate() {
-  return -1 * (this->exp->calculate());
-}
-/*
- * the Plus constructor
- * param left - pointer to the inner class
- * param right - pointer to the inner class
- */
-Plus::Plus(Expression *l, Expression *r) : BinaryOperator(l, r) {}
-Plus::~Plus() {}
-/*
- * Calculate return the sum of the two inner claas
- */
-double Plus::calculate() {
-  return this->left->calculate() + this->right->calculate();
-}
-/*
- * the Minus constructor
- * param left - pointer to the inner class
- * param right - pointer to the inner class
- */
-Minus::Minus(Expression *l, Expression *r) : BinaryOperator(l, r) {}
-Minus::~Minus() {}
-/*
- * Calculate return the subtraction of the two inner claass
- */
-double Minus::calculate() {
-  return this->left->calculate() - this->right->calculate();
-}
-/*
- * the Mul constructor
- * param left - pointer to the inner class
- * param right - pointer to the inner class
- */
-Mul::Mul(Expression *l, Expression *r) : BinaryOperator(l, r) {}
-Mul::~Mul() {}
-/*
- * Calculate return the multiplication of the two inner claas
- */
-double Mul::calculate() {
-  return this->left->calculate() * this->right->calculate();
-}
-/*
- * the Div constructor
- * param left - pointer to the inner class
- * param right - pointer to the inner class
- */
-Div::Div(Expression *l, Expression *r) : BinaryOperator(l, r) {}
-Div::~Div() {}
-/*
- * Calculate return the division of the two inner claas
- */
-double Div::calculate() {
-  if (this->right->calculate() == 0) {
-    throw "bad input";
-  }
-  return this->left->calculate() / this->right->calculate();
-}
-/*
- * the Interpreter constructor
- * initialize the operator map
- */
-Interpreter::Interpreter() {
-  this->operatorMap["-"] = 1;
-  this->operatorMap["+"] = 1;
-  this->operatorMap["*"] = 2;
-  this->operatorMap["/"] = 2;
-  this->operatorMap["^"] = 3;
-  this->operatorMap["&"] = 3;
-}
-/*
- * checkNum - checks if a certain string is a valid floating ponint
- * str - the certain string
- */
-bool Interpreter::checkNum(string str) {
-  regex rg("^[-+]?[0-9]+(\\.[0-9]+)?$");
-  if (!(regex_match(str.begin(), str.end(), rg))) {
-    return false;
-  }
-  return true;
-}
-/*
- * checkVar - checks if a certain string is a valid variable
- * str - the certain string
- */
-bool Interpreter::checkVar(string var) {
-  int i = var.substr(0, var.length()).find('=');
-  if (i == -1 || (unsigned) i == var.length() - 1) {
-    return false;
-  }
-  string varName = var.substr(0, i);
-  string num = var.substr(i + 1, var.length());
-  regex rg("^([a-z]*[A-Z]*_*)+[0-9]*[a-z]*[A-Z]*_*$");
-  //verified the string
-  if (!(regex_match(varName.begin(), varName.end(), rg))) {
-    return false;
-  }
-  if (!checkNum(num)) {
-    return false;
-  }
-  const char *c = num.c_str();
-  double value = atof(c);
-  this->map[varName] = value;
-  return true;
-}
-/*
- * setVariables - initialized the variables in the map in order to use them
- * in the interpret process
- * str - the string that contains the variables data
- */
-void Interpreter::setVariables(string str) {
-  std::string s = str;
-  //checks the validity of the string
-  if (str[0] == ';' || str[str.length() - 1] == ';') {
-    throw "bad input";
-  }
-  std::vector<std::string> array;
-  std::stringstream ss(s);
-  std::string tmp;
-  //separate the string into several string that each of them contain date of 1 variable
-  while (std::getline(ss, tmp, ';')) {
-    array.push_back(tmp);
-  }
-  //checks each variable individually
-  for (unsigned int i = 0; i < array.size(); i++) {
-    if (!checkVar(array[i])) {
+
+Variable::Variable(string n, double v) {
+  // check if the variable name is valid
+  if (n[0] >= '0' && n[0] <= '9') throw "bad input";
+  for (char i : n) {
+    if (!((i >= '0' && i <= '9') || i == '_' || (i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z'))) {
       throw "bad input";
     }
   }
+  name = n;
+  value = v;
 }
-/*
- * pushOp - push operator to the stack and verified that the mathematical priority is
- * maintained
- * s - the operator that is being pushed to the stack
- */
-void Interpreter::pushOp(string s) {
-  string top;
-  while (!this->s1.empty()) {
-    top += this->s1.top();
-    if (!(this->operatorMap[top] > 0)) {
-      break;
+
+UnaryOperator::~UnaryOperator() {
+  if (exp != nullptr)
+    delete (exp);
+}
+
+double UPlus::calculate() {
+  return exp->calculate();
+}
+
+double UMinus::calculate() {
+  return -exp->calculate();
+
+}
+
+BinaryOperator::~BinaryOperator() {
+  if (expL != nullptr)
+    delete (expL);
+  if (expR != nullptr)
+    delete (expR);
+}
+
+double Plus::calculate() {
+  return expL->calculate() + expR->calculate();
+}
+
+double Minus::calculate() {
+
+  return expL->calculate() - expR->calculate();
+
+}
+
+double Mul::calculate() {
+  return expL->calculate() * expR->calculate();
+
+}
+
+double Div::calculate() {
+  if (expL->calculate() != 0)
+    return expR->calculate() / expL->calculate();
+  else throw "bad input";
+
+}
+
+void Interpreter::setVariables(string s) {
+  int j, k = 0;
+  while ((unsigned) k < s.length()) {
+    // scan the string, take it apart in the ';' signs, and send it to stringToVariable to save it in vMap
+    j = s.substr(k, s.length()).find(';');
+    stringToVariable(s.substr(k, j));
+    if (j == -1) break;
+    k += (j + 1);
+  }
+}
+
+void Interpreter::stringToVariable(string s) {
+  if (!isValidVariableString(s)) throw "bad input";
+  int j, k = 0;
+  string name;
+  double val;
+  // extract the name
+  j = s.substr(k, s.length()).find('=');
+  if (j == -1) throw "bad input";
+  name = s.substr(k, j);
+  // check the variable name validation
+  if (name[0] >= '0' && name[0] <= '9') throw "bad input";
+  for (char i : name) {
+    if (!((i >= '0' && i <= '9') || i == '_' || (i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z'))) {
+      throw "bad input";
     }
-    // maintain the mathematical priority
-    if (this->operatorMap[s] < this->operatorMap[top]) {
-      this->s2.push(top);
-      this->s1.pop();
+  }
+
+  // extract the value
+  k += (j + 1);
+  int dotCounter = 0;
+  int MinusOrPlus = 0;
+  j = s.substr(k, s.length()).find('=');
+  //check if the string-value represent a valid double
+  //check if first or last char is '.'
+  if (s.substr(k, j)[0] == '.' || s.substr(k, j)[s.substr(k, j).length() - 1] == '.')
+    throw "bad input";
+  //check if there is any non valid character in the string, or more than 1 '.'/'+'/'-'
+  for (char i : s.substr(k, j)) {
+    if (((i < '0' || i > '9') && i != '.' && i != '+' && i != '-') || dotCounter > 1 || MinusOrPlus > 1) {
+      throw "bad input";
+    }
+    if (i == '.') dotCounter++;
+    if (i == '+' || i == '-') MinusOrPlus++;
+  }
+  //check if the minus/plus in the right place
+  if (MinusOrPlus == 1) {
+    if (s.substr(k, j)[0] != '+' && s.substr(k, j)[0] != '-') {
+      throw "bad input";
+    }
+    if (s.substr(k, j)[1] == '.') throw "bad input";
+  }
+
+  const char *value = s.substr(k, j).c_str();
+  val = stod(value);
+  vMap[name] = val;
+}
+
+Expression *Interpreter::interpret(string stringExp) {
+  // check if the parenthesis order in the right order
+  if (!validParenthesis(stringExp) || stringExp.length() == 0)
+    throw "bad input";
+
+  stack<string> s;
+  queue<string> q;
+  int k = 0;
+  while (true) {
+    // get the next operator/variable/value
+    string letter = getLetter(stringExp, k);
+    if (letter == "end of string") break;
+    // implement of the shunting yard algorithm
+    if (isOperator(letter)) {
+      if (s.empty() || letter == "(") { s.push(letter); }
+      else if (letter == ")") {
+        while (s.top() != "(") {
+          q.push(s.top());
+          s.pop();
+        }
+        s.pop();
+      } else if (leftIsPrefer(letter, s.top())) {
+        s.push(letter);
+      } else {
+        while (!leftIsPrefer(letter, s.top())) {
+          q.push(s.top());
+          s.pop();
+          if (s.empty()) break;
+        }
+        s.push(letter);
+      }
+    } else if (isVariable(letter)) {
+      q.push(letter);
     } else {
+      q.push(letter);
+    }
+  }
+  while (!s.empty()) {
+    q.push(s.top());
+    s.pop();
+  }
+  // send the postfix queue "q" to the expressionCreator
+  return expressionCreator(q);
+}
+
+string Interpreter::getLetter(string s, int &k) {
+  int start = k;
+  if ((unsigned) k == s.length()) {
+    k = -1;
+    return "end of string";
+  }
+  // check if the string is valid, read a part of the string - operator/variable or value
+  // read operator
+  if (isOperator(s.substr(start, 1))) {
+    if (!((s.substr(start, 1) == "(") || (s.substr(start, 1) == ")")))
+      if (((s.substr(start + 1, 1) == "*") || (s.substr(start + 1, 1) == "/")))
+        throw "bad input";
+    if ((s.substr(start, 1) == ")") && (s.substr(start + 1, 1) == "("))
+      throw "bad input";
+    //Unary operators
+    if (s.substr(start, 1) == "+" || s.substr(start, 1) == "-") {
+      if (k == 0) {
+        k++;
+        if (s.substr(start, 1) == "+") { return "^"; }
+        if (s.substr(start, 1) == "-") { return "%"; }
+      }
+      if (s.substr(start - 1, 1) == "(" && isOperator(s.substr(start + 1, 1))) {
+        k++;
+        if (s.substr(start, 1) == "+") { return "^"; }
+        if (s.substr(start, 1) == "-") { return "%"; }
+      }
+
+    }
+    if (!(s.substr(start, 1) == "+" || s.substr(start, 1) == "-") ||
+        isOperator(s.substr(start + 1, 1)) ||
+        s.substr(start - 1, 1) != "(") {
+      if (!((s.substr(start, 1) == "+" || s.substr(start, 1) == "-") &&
+          (s.substr(start + 1, 1) == "+" || s.substr(start + 1, 1) == "-" ||
+              (s.substr(start + 1, 1) >= "0" && s.substr(start + 1, 1) <= "9")) &&
+          isOperator(s.substr(start - 1, 1))) || s.substr(start - 1, 1) == ")") {
+        k++;
+        return s.substr(start, 1);
+      }
+    }
+  }
+  k++;
+  // read variable or number
+  for (char i : s.substr(start + 1, s.length() - 1)) {
+    if (!(i == ')' || i == '(' || i == '+' || i == '-' || i == '*' || i == '/')) {
+      if (i == 0) {
+        k = -1;
+        return "end of string";
+      }
+      k++;
+    } else { break; }
+  }
+  return s.substr(start, k - start);
+}
+
+bool Interpreter::isOperator(string s) {
+  return (s == ")" || s == "(" || s == "+" || s == "-" || s == "*" || s == "/" || s == "^" || s == "%");
+}
+
+bool Interpreter::isVariable(string s) {
+  // check if the string s is a valid variable
+  bool containsLetters = false;
+  for (char i : s) {
+    if ((i < '0' || i > '9') && i != '+' && i != '-' && i != '.') {
+      containsLetters = true;
       break;
     }
-    top.clear();
   }
-  this->s1.push(s);
-}
-/*
- * popFromstack - pop all the mathematical expression between the parentheses. after we reach to closing
- * parentheses
- * if the opening parentheses is not in the stack the methoeds return false
- */
-bool Interpreter::popFromStack() {
-  bool flag = false;
-  string top;
-  while (!this->s1.empty()) {
-    top = this->s1.top();
-    this->s1.pop();
-    if (top.compare("(") == 0) {
-      flag = true;
-      break;
-    } else {
-      this->s2.push(top);
-    }
-  }
-  return flag;
-}
-/*
- * pushNum - push number to the queue and returns its length.
- *  str - the string that contain the number
- */
-int Interpreter::pushNum(string str) {
-  unsigned int i;
-  string check;
-  for (i = 1; i < str.length(); i++) {
-    if ((str[i] >= '0' && str[i] <= '9') || str[i] == '.') {
-      continue;
-    } else {
-      break;
-    }
-  }
-  check.append(str, 0, i);
-  if (!checkNum(check)) {
-    return -1;
-  }
-  this->s2.push(check);
-  return i;
-}
-/*
- * pushVar - push variable to the queue and returns its length.
- *  str - the string that contain the variable
- */
-int Interpreter::pushVar(string str) {
-  unsigned int i;
-  string check;
-  for (i = 0; i < str.length(); i++) {
-    if ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9')
-        || str[i] == '_') {
-      continue;
-    } else {
-      break;
-    }
-  }
-  check.append(str, 0, i);
-  if (this->map.count(check) > 0) {
-    this->s2.push(check);
-    return i;
-  }
-  return -1;
-}
-/*
- * verified that the expression that we get is valid and push all the
- * remaining string in the stack to queue.
- */
-bool Interpreter::checkStack() {
-  while (!this->s1.empty()) {
-    if (s1.top().compare("(") == 0) {
-      return false;
-    }
-    this->s2.push(this->s1.top());
-    this->s1.pop();
-  }
-  return true;
-}
-/*
- * putInstack - gets an expression in string, verified it and puts
- * the string in a queue and stack according to the shunting yard algorithm
- * str - the string that holds the expression.
- * return - true - success , false - failure
- */
-bool Interpreter::putInStack(string str) {
-  if (str[0] == ')' || str[0] == '*' || str[0] == '/') {
+  if (!containsLetters) {
     return false;
   }
-  int flagOp = 0, flagNum = 0, flagVar = 0, flagP1 = 0, flagP2 = 0, check;
-  string s;
-  for (unsigned int i = 0; i < str.length(); i++) {
-    s.clear();
-    s.append(str, i, 1);
-    if (str[i] == '(') {
-      if (flagNum || flagVar || flagP2) {
-        return false;
-      }
-      this->s1.push(s);
-      flagP1 = 1, flagOp = 0, flagNum = 0, flagP2 = 0, flagVar = 0;
-    } else if (str[i] == ')') {
-      if (flagOp || flagP1 || !popFromStack()) {
-        return false;
-      }
-      flagP1 = 0, flagOp = 0, flagNum = 0, flagP2 = 1;
-    } else if ((!(i != str.length() - 1 && (str[i + 1] >= '0' && str[i] <= '9')) || (flagNum > 0 || flagVar > 0))
-        && (this->operatorMap.count(s) > 0)) {
-      if (i == 0 || flagP1) {
-        if (s.compare("+") == 0) {
-          s = "&";
-        }
-        if (s.compare("-") == 0) {
-          s = "^";
-        }
-        if (s.compare("*") == 0 || s.compare("/") == 0 || flagOp) {
-          return false;
-        }
-      }
-      pushOp(s);
-      flagP1 = 0, flagOp = 1, flagP2 = 0, flagNum = 0, flagVar = 0;
-    } else if ((str[i] >= '0' && str[i] <= '9') || (str[i] == '-' || str[i] == '+')) {
-      if (flagVar || flagP2 || (flagOp && (str[i] == '+' || str[i] == '-'))) {
-        return false;
-      }
-      check = pushNum(str.substr(i, str.length()));
-      if (check < 0) {
-        return false;
-      }
-      flagP1 = 0, flagOp = 0, flagNum = 1, flagP2 = 0, flagVar = 0;
-      i = i + check - 1;
-    } else {
-      check = pushVar(str.substr(i, str.length()));
-      if (check < 0 || flagNum || flagP2) {
-        return false;
-      }
-      if ((flagOp) && (str[i - 1] == '^' || str[i - 1] == '&')) {
-        return false;
-      }
-      i = i + check - 1;
-      flagP1 = 0, flagOp = 0, flagNum = 0, flagP2 = 0, flagVar = 1;
-    }
-  }
-  return checkStack();
+  // check if the variable exist in the variables map
+  if (vMap.find(s) == vMap.end()) {
+    throw "bad input";
+  } else { return true; }
 }
-/*
- * buldExp - build Expression according to data in the queue
- * and according to shunting yard algorithm
- */
-Expression *Interpreter::buildExp() {
-  string str;
-  Expression *e1 = nullptr, *e2 = nullptr;
-  //in this loop a string is poped from the queue and goes to the expression stack according to its value
-  while (!this->s2.empty()) {
-    str.clear();
-    str += this->s2.front();
-    this->s2.pop();
-    if (checkNum(str)) {
-      const char *c = str.c_str();
-      double value = atof(c);
-      this->s3.push(new Value(value));
-    } else if (this->map.count(str) > 0) {
-      this->s3.push(new Variable(str, this->map[str]));
-    } else if (this->operatorMap.count(str) > 0 && (str.compare("&") != 0 && str.compare("^") != 0)) {
-      if (s3.size() < 2) {
-        return nullptr;
-      }
-      e2 = this->s3.top();
-      this->s3.pop();
-      e1 = this->s3.top();
-      this->s3.pop();
-      if (str.compare("*") == 0) {
-        this->s3.push(new Mul(e1, e2));
-      } else if (str.compare("/") == 0) {
-        this->s3.push(new Div(e1, e2));
-      } else if (str.compare("+") == 0) {
-        this->s3.push(new Plus(e1, e2));
-      } else if (str.compare("-") == 0) {
-        this->s3.push(new Minus(e1, e2));
-      }
-    } else {
-      if (this->s3.size() < 1) {
-        return nullptr;
-      }
-      e1 = this->s3.top();
-      this->s3.pop();
-      if (str.compare("^") == 0) {
-        this->s3.push(new UMinus(e1));
+
+bool Interpreter::leftIsPrefer(string oper, string top) {
+  // set of priorities for the shunting yard algorithm
+  map<string, int> priorityMap;
+  priorityMap["("] = 0;
+  priorityMap["+"] = 1;
+  priorityMap["-"] = 1;
+  priorityMap["*"] = 2;
+  priorityMap["/"] = 2;
+  priorityMap["^"] = 3;
+  priorityMap["%"] = 3;
+  return (priorityMap[oper] >= priorityMap[top]);
+}
+
+Expression *Interpreter::expressionCreator(queue<string> q) {
+  // second part of the algorithm, get a queue with postfix order and create Expression out of it
+  stack<Expression *> s;
+  Expression *left = nullptr;
+  Expression *right = nullptr;
+  while (!q.empty()) {
+    if (isOperator(q.front())) {
+      if (q.front() == "^" || q.front() == "%") {
+        if (s.empty()) throw "bad input";
+        left = s.top();
+        s.pop();
+        if (q.front() == "^") {
+          s.push(new UPlus(left));
+        } else if (q.front() == "%") {
+          s.push(new UMinus(left));
+        } else {
+          throw "bad input";
+        }
+        q.pop();
       } else {
-        this->s3.push(new UPlus(e1));
+        if (s.empty()) throw "bad input";
+        left = s.top();
+        s.pop();
+        if (s.empty()) throw "bad input";
+        right = s.top();
+        s.pop();
+        if (q.front() == "+") {
+          s.push(new Plus(left, right));
+        } else if (q.front() == "-") {
+          s.push(new Minus(left, right));
+        } else if (q.front() == "*") {
+          s.push(new Mul(left, right));
+        } else if (q.front() == "/") {
+          s.push(new Div(left, right));
+        } else {
+          throw "bad input";
+
+        }
+        q.pop();
       }
+    } else {
+      if (isVariable(q.front())) {
+        s.push(new Variable(q.front(), vMap[q.front()]));
+      } else {
+        s.push(new Value(stod(q.front())));
+      }
+      q.pop();
+    }
+
+  }
+  return s.top();
+
+}
+
+bool Interpreter::validParenthesis(string s) {
+  // check if the string has a valid parenthesis order
+  queue<char> q;
+  for (char i : s) {
+    try {
+      if (i == '(') q.push('(');
+      if (i == ')') q.pop();
+    } catch (...) {
+      return false;
     }
   }
-  if (this->s3.size() != 1) {
-    return nullptr;
-  }
-  e1 = this->s3.top();
-  this->s3.pop();
-  return e1;
-
-}
-/*
- * startOver - verifed that the stacks and the queue are empty and dont have strings from previous processs
- */
-void Interpreter::startOver() {
-  while (!this->s1.empty()) {
-    this->s1.pop();
-  }
-  while (!this->s2.empty()) {
-    this->s2.pop();
-  }
-  while (!this->s3.empty()) {
-    this->s3.pop();
-  }
-}
-/*
- * interpret - build an expression from a given string depending on the
- * str - the expression in a string
- * return pointer to the expression if the process succeeded
- */
-Expression *Interpreter::interpret(string str) {
-  startOver();
-  if (!putInStack(str)) {
-    throw ("bad input");
-  }
-  Expression *e = buildExp();
-  if (e == nullptr) {
-    throw ("bad input");
-  }
-  return e;
+  return q.empty();
 }
 
-
-
+bool Interpreter::isValidVariableString(string s) {
+  unsigned int counter = 0;
+  for (char i : s) {
+    if (i == '=') counter++;
+  }
+  return (counter == 1);
+}

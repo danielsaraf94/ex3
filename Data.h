@@ -9,6 +9,8 @@
 #include "queue"
 #include "unordered_map"
 #include "ex1.h"
+#include <bits/stdc++.h>
+
 using namespace std;
 
 class Data : public Command {

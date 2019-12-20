@@ -29,8 +29,8 @@ int Var::execute(vector<string> *string_vec, int i) {
     if (sign == 2) {
       (*this->sim_num_map)[sim] = data;
     }
-    (*this->varName_data_map)[varName] = data;
   }
+  (*this->varName_data_map)[varName] = data;
   (*this->str_command_map)[varName] = data;
   return 2;
 }

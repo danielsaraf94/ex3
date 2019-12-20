@@ -21,17 +21,15 @@ int Data::execute(vector<string> *string_vec, int j) {
       continue;
     }
     Data* data=(*this->symbol_table)[varName];
-    ostringstream strs;
-    strs << data->getValue();
-    string value = strs.str();
+    string value = std::to_string(data->getValue());
     interpreter->setVariables(varName+"="+value);
     i=l+1;
   }
   try{
-    string expression = str.substr(getIndexAfterOp(str,0));
+    string expression = str.substr(1);
     double newValue = interpreter->interpret(expression)->calculate();
     setValue(newValue);
-  }catch (...){
+  }catch (char* e){
     cerr<<"Something went wrong with the interpretation"<<endl;
   }
   return 2;
@@ -47,9 +45,9 @@ int Data::getIndexBeforeOp(string str, int i) {
 }
 int Data::getIndexAfterOp(string str,int i) {
   for (; i < str.length(); i++) {
-    if (str[i] != '=' || str[i] != '<' || str[i] != '>' || str[i] != '/' || str[i] != '*' || str[i] != '+'
-        || str[i] != '-') {
-      return i+1;
+    if (!(str[i] == '=' || str[i] == '<' || str[i] == '>' || str[i] == '/' || str[i] == '*' || str[i] == '+'
+        || str[i] == '-')) {
+      break;
     }
   }
   return i;

@@ -1,120 +1,155 @@
 //
-// Created by shlomo on 04/11/2019.
+// Created by daniels on 07/11/2019.
 //
-
-#ifndef EX1_EX1_H
-#define EX1_EX1_H
+#include <cstring>
 #include <iostream>
 #include <map>
-#include <regex>
+#include <cstdlib>
 #include <stack>
 #include <queue>
+#include <stdexcept>
 #include "Expression.h"
+#ifndef UNTITLED2_EX1_H
+#define UNTITLED2_EX1_H
 
 using namespace std;
+
+class Value : public Expression {
+
+  double val;
+ public:
+  explicit Value(double x) : val(x) {}
+
+  double calculate() override;
+
+  double getVal() const {
+    return val;
+  }
+};
+
+//----------------------------------------------------------------------------
 class Variable : public Expression {
   string name;
   double value;
  public:
-  Variable(string, double);
-  Variable(Variable *);
-  Variable &operator++(int);
+  Variable(string n, double v);
+
+  double calculate() override;
+
   Variable &operator++();
-  Variable &operator--(int);
+
+  Variable &operator++(int);
+
+  string getName();
+
+  double getValue() const;
+
   Variable &operator--();
+
+  Variable &operator--(int);
+
   Variable &operator+=(double);
+
   Variable &operator-=(double);
-  virtual double calculate();
-  virtual ~Variable();
+
 };
 
-class Value : public Expression {
-  double value;
- public:
-  Value(double);
-  double calculate();
-  virtual ~Value();
-};
-
+//----------------------------------------------------------------------------
 class UnaryOperator : public Expression {
  protected:
-  Expression *exp;
-  UnaryOperator(Expression *);
+  Expression *exp = nullptr;
+
+  explicit UnaryOperator(Expression *e) : exp(e) {};
  public:
-  virtual ~UnaryOperator();
+  ~UnaryOperator() override;
 };
 
-class BinaryOperator : public Expression {
- protected:
-  Expression *left;
-  Expression *right;
-  BinaryOperator(Expression *, Expression *);
- public:
-  virtual ~BinaryOperator();
-};
-
+//----------------------------------------------------------------------------
 class UPlus : public UnaryOperator {
  public:
-  UPlus(Expression *exp);
-  virtual ~UPlus();
-  double calculate();
+  explicit UPlus(Expression *e) : UnaryOperator(e) {}
+
+  double calculate() override;
 };
+
+//----------------------------------------------------------------------------
 class UMinus : public UnaryOperator {
  public:
-  UMinus(Expression *exp);
-  virtual ~UMinus();
-  double calculate();
+  explicit UMinus(Expression *e) : UnaryOperator(e) {}
+
+  double calculate() override;
 };
 
+//----------------------------------------------------------------------------
+class BinaryOperator : public Expression {
+ protected:
+  Expression *expR = nullptr, *expL = nullptr;
+
+  BinaryOperator(Expression *r, Expression *l) : expR(r), expL(l) {};
+ public:
+  ~BinaryOperator() override;
+};
+
+//----------------------------------------------------------------------------
 class Plus : public BinaryOperator {
+
  public:
-  Plus(Expression *left, Expression *right);
-  virtual ~Plus();
-  double calculate();
+  Plus(Expression *r, Expression *l) : BinaryOperator(r, l) {};
+
+  double calculate() override;
 };
 
-class Mul : public BinaryOperator {
- public:
-  Mul(Expression *left, Expression *right);
-  virtual ~Mul();
-  double calculate();
-};
-
-class Div : public BinaryOperator {
- public:
-  Div(Expression *left, Expression *right);
-  virtual ~Div();
-  double calculate();
-};
-
+//----------------------------------------------------------------------------
 class Minus : public BinaryOperator {
+
  public:
-  Minus(Expression *left, Expression *right);
-  virtual ~Minus();
-  double calculate();
+  Minus(Expression *r, Expression *l) : BinaryOperator(r, l) {};
+
+  double calculate() override;
 };
 
+//----------------------------------------------------------------------------
+class Mul : public BinaryOperator {
+
+ public:
+  Mul(Expression *r, Expression *l) : BinaryOperator(r, l) {};
+
+  double calculate() override;
+};
+
+//----------------------------------------------------------------------------
+class Div : public BinaryOperator {
+
+ public:
+  Div(Expression *r, Expression *l) : BinaryOperator(r, l) {};
+
+  double calculate() override;
+};
+
+//----------------------------------------------------------------------------
 class Interpreter {
-  std::map<string, double> map;
-  std::map<string, int> operatorMap;
-  stack<string> s1;
-  queue<string> s2;
-  stack<Expression *> s3;
-  bool checkVar(string);
-  bool checkNum(string);
-  bool putInStack(string);
-  void pushOp(string);
-  bool popFromStack();
-  int pushNum(string);
-  int pushVar(string);
-  bool checkStack();
-  void startOver();
-  Expression *buildExp();
+  map<string, double> vMap;
+
+  void stringToVariable(string s);
+
+  string getLetter(string, int &);
+
+  bool isOperator(string);
+
+  bool isVariable(string);
+
+  bool leftIsPrefer(string, string);
+  bool isValidVariableString(string);
+
+  Expression *expressionCreator(queue<string>);
+
+  bool validParenthesis(string);
+
  public:
-  Interpreter();
+  Expression *interpret(string stringExp);
+
   void setVariables(string);
-  Expression *interpret(string);
 
 };
 
-#endif //EX1_EX1_H
+#endif //UNTITLED2_EX1_H
