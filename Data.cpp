@@ -1,6 +1,5 @@
 
 #include "Data.h"
-#include "ex1.cpp"
 
 Data::Data(string var, string simulator, int biding, queue<string> *queue,unordered_map<string,Data*>* map) {
   this->sign = biding;

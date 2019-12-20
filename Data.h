@@ -8,6 +8,7 @@
 #include "iostream"
 #include "queue"
 #include "unordered_map"
+#include "ex1.h"
 using namespace std;
 
 class Data : public Command {
