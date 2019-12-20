@@ -36,7 +36,7 @@ bool Lexer::lexer(vector<string> *vector) {
       args.erase(std::remove_if(args.begin(), args.end(), &Lexer::isParenthesesOrApos), args.end());
       int simLoc = args.find("sim");
       if (simLoc > -1) {
-        args = args.substr(0, simLoc) + args.substr(simLoc + 3);
+        args = args.substr(0, simLoc) + args.substr(simLoc + 4);
       }
       args.erase(std::remove(args.begin(), args.end(), '\t'), args.end());
       vector->push_back(args);
@@ -60,8 +60,10 @@ int Lexer::separationLoc(string &str) {
 }
 bool Lexer::isParenthesesOrApos(char c) {
   switch (c) {
+    /*
     case '(':
     case ')':
+     */
     case '"':return true;
     default:return false;
   }

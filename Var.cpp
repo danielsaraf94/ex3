@@ -24,7 +24,7 @@ int Var::execute(vector<string> *string_vec, int i) {
     data = new Data(varName, "", sign, this->update_simulator_q, this->varName_data_map);
     data->setValue(value);
   } else {
-    string sim = str->substr(index + 2, str->length());
+    string sim = str->substr(index + 2, str->length()-1);
     data = new Data(varName, sim, sign, this->update_simulator_q, this->varName_data_map);
     if (sign == 2) {
       (*this->sim_num_map)[sim] = data;
