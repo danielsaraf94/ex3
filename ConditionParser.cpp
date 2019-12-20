@@ -4,9 +4,10 @@
 
 #include <regex>
 #include "ConditionParser.h"
-ConditionParser::ConditionParser(unordered_map<string, Command *> *map1, unordered_map<string, Data *> *map2) {
+ConditionParser::ConditionParser(unordered_map<string, Command *> *map1, unordered_map<string, Data *> *map2,Globals* g) {
   this->command_map = map1;
   this->symbol_table = map2;
+  this->globals=g;
 }
 
 int ConditionParser::execute(vector<string> *string_vec, int i) {

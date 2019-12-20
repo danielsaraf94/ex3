@@ -1,17 +1,18 @@
-
 #include "Data.h"
 
-Data::Data(string var, string simulator, int biding, queue<string> *queue,unordered_map<string,Data*>* map) {
+Data::Data(string var, string simulator, int biding, queue<string> *queue,unordered_map<string,Data*>* map,Globals* g) {
   this->sign = biding;
   this->varName = var;
   this->sim = simulator;
   this->update_simulator_q = queue;
   this->symbol_table = map;
+  this->globals=g;
 }
 int Data::execute(vector<string> *string_vec, int j) {
   string str = (*string_vec)[j];
   int i = 0,l=0;
   Interpreter interpreter;
+  globals->locker.lock();
   while(i<=str.length()){
     i = getIndexAfterOp(str,l);
     l= getIndexBeforeOp(str,i);
@@ -25,6 +26,7 @@ int Data::execute(vector<string> *string_vec, int j) {
     interpreter.setVariables(varName+"="+value);
     i=l+1;
   }
+  globals->locker.unlock();
   try{
     string expression = str.substr(1);
     double newValue = interpreter.interpret(expression)->calculate();
@@ -55,7 +57,9 @@ int Data::getIndexAfterOp(string str,int i) {
 void Data::setValue(double val) {
   this->value = val;
   if(sign==1){
+    globals->locker.lock();
     this->update_simulator_q->push(this->varName);
+    globals->locker.unlock();
   }
 }
 double Data::getValue() {
@@ -70,6 +74,3 @@ string Data::getVarName() {
 int Data::getSign(){
   return this->sign;
 }
-
-
-

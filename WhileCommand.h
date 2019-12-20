@@ -12,19 +12,18 @@
 #include "OpenServerCommand.h"
 #include <queue>
 #include "ClientConnectCommand.h"
-#include "Globals.h"
 #include "PrintCommand.h"
 #include "Var.h"
 #include "SleepCommand.h"
 #include "ConditionParser.h"
 
 class WhileCommand : public Command {
-  unordered_map<string, Command *> * c_m;
-  unordered_map<string, Data *> * s_t;
+  unordered_map<string, Command *> *c_m;
+  unordered_map<string, Data *> *s_t;
   vector<string> *s_v;
  public:
-  WhileCommand(unordered_map<string, Command *> *, unordered_map<string, Data *> *,vector<string> *);
-  int execute(vector<string> *,int);
+  WhileCommand(unordered_map<string, Command *> *, vector<string> *);
+  int execute(vector<string> *, int);
 };
 
 #endif //EX3_3__WHILECOMMAND_H_

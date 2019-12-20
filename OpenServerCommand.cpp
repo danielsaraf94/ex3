@@ -104,16 +104,15 @@ void OpenServerCommand::readFromClient(int client_socket,
     int valread = read(client_socket, buffer, 1024);
     char *end = buffer;
     for (int i = 0; i < 36; i++) {
-      glob->locker.lock();
       if (sim_table->find((*numTosim)[i]) == sim_table->end()) {
-        glob->locker.unlock();
         strtod(end, &end);
         end++;
         continue;
       }
+      glob->locker.lock();
       (*sim_table)[(*numTosim)[i]]->setValue(strtod(end, &end));
-      glob->locker.unlock();
       end++;
+      glob->locker.unlock();
     }
   }
   close(server_socket);

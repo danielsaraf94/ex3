@@ -3,8 +3,9 @@
 
 #include "PrintCommand.h"
 
-PrintCommand::PrintCommand(unordered_map<string, Data *> *s) {
+PrintCommand::PrintCommand(unordered_map<string, Data *> *s,Globals* g) {
   this->symbol_table = s;
+  globals = g;
 }
 int PrintCommand::execute(vector<string> *string_vec, int i) {
   string s = (*string_vec)[i];

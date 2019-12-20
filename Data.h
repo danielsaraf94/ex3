@@ -9,6 +9,7 @@
 #include "queue"
 #include "unordered_map"
 #include "ex1.h"
+#include "Globals.h"
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -19,11 +20,12 @@ class Data : public Command {
   string sim;
   unordered_map<string, Data *> *symbol_table;
   queue<string> *update_simulator_q;
+  Globals * globals;
   //represents the direction of the biding, 1 : ->, 2: <- , 3: =
   int sign;
  public:
   Data() {};
-  Data(string, string, int, queue<string> *, unordered_map<string, Data *> *);
+  Data(string, string, int, queue<string> *, unordered_map<string, Data *> *,Globals *);
   virtual int execute(vector<string> *, int);
   void setValue(double);
   double getValue();
@@ -36,4 +38,3 @@ class Data : public Command {
 };
 
 #endif //EX3_CMAKE_BUILD_DEBUG_DATA_H_
-
