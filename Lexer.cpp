@@ -25,6 +25,8 @@ bool Lexer::lexer(vector<string> *vector) {
     string command = line.substr(0, i);
     command.erase(std::remove_if(command.begin(), command.end(), &isParenthesesOrApos), command.end());
     command.erase(std::remove_if(command.begin(), command.end(), &isSpace), command.end());
+    command.erase(std::remove_if(command.begin(), command.end(), &isSpace), command.end());
+    command.erase(std::remove(command.begin(), command.end(), '\t'), command.end());
     vector->push_back(command);
     if (i != line.length()) {
       string args = line.substr(i, line.length());
@@ -36,6 +38,7 @@ bool Lexer::lexer(vector<string> *vector) {
       if (simLoc > -1) {
         args = args.substr(0, simLoc) + args.substr(simLoc + 3);
       }
+      args.erase(std::remove(args.begin(), args.end(), '\t'), args.end());
       vector->push_back(args);
     }
   }

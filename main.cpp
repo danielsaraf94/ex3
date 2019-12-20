@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <regex>
 #include "ConditionParser.h"
+#include "WhileCommand.h"
 
 using namespace std;
 void varAssign(string &, string &, unordered_map<string, Data *> &, queue<string> &update_simulator_q);
@@ -20,10 +21,9 @@ void parse(vector<string> &,
            unordered_map<string, Command *> &,
            unordered_map<string, Data *> &,
            queue<string> &update_simulator_q);
-void commandMapInit(unordered_map<string, Command *> *,
-                    unordered_map<string, Data *> *,
-                    unordered_map<string, Data *> *,
-                    queue<string> *, Globals *);
+void commandMapInit(unordered_map<string, Command *> *, unordered_map<string, Data *> *,
+                    unordered_map<string, Data *> *, queue<string> *, Globals *, vector<string> *);
+
 int main(int argc, char *argv[]) {
   Globals g;
   g.to_close = false;
@@ -37,12 +37,16 @@ int main(int argc, char *argv[]) {
   unordered_map<string, Command *> command_map;
   unordered_map<string, Data *> symbol_table;
   unordered_map<string, Data *> sim_table;
-  commandMapInit(&command_map, &symbol_table, &sim_table, &update_simulator_q, &g);
+  commandMapInit(&command_map, &symbol_table, &sim_table, &update_simulator_q, &g, &string_vec);
   parse(string_vec, command_map, symbol_table, update_simulator_q);
   g.to_close = true;
 }
-void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map<string, Data *> *symbol_table,
-                    unordered_map<string, Data *> *sim_table, queue<string> *update_simulator_q, Globals *globals) {
+void commandMapInit(unordered_map<string, Command *> *command_map,
+                    unordered_map<string, Data *> *symbol_table,
+                    unordered_map<string, Data *> *sim_table,
+                    queue<string> *update_simulator_q,
+                    Globals *globals,
+                    vector<string> *string_vec) {
   // here we should initialize all of the commands object and assigned it to the map
   // strings and objects: openDataServer - OpenServerCommand, connectControlClient- ClientConnectCommand,
   // var - CreateVariableCommand , Print - PrintCommand, Sleep - SleepCommand, While/if/function/Condition parser
@@ -67,9 +71,13 @@ void commandMapInit(unordered_map<string, Command *> *command_map, unordered_map
 
   (*command_map)[string("Sleep")] = sleep;
 
-  Command *conPar = new ConditionParser(command_map,symbol_table);
+  Command *conPar = new ConditionParser(command_map, symbol_table);
 
   (*command_map)[string("if")] = conPar;
+
+  Command *while_command = new WhileCommand(command_map, symbol_table, string_vec);
+
+  (*command_map)[string("while")] = while_command;
 
 }
 void parse(vector<string> &string_vec,
