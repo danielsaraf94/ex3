@@ -22,6 +22,7 @@ class Var : public Command {
  public:
   Var(unordered_map<string, Command *> *, unordered_map<string, Data *> *, unordered_map<string,Data*>* ,queue<string> *);
   int execute(vector<string> *, int);
+  static bool isParentheses(char);
   ~Var() {};
 };
 

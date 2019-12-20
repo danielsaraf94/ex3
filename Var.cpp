@@ -21,7 +21,8 @@ int Var::execute(vector<string> *string_vec, int i) {
     data = new Data(varName, "", sign, this->update_simulator_q, this->varName_data_map);
     data->setValue(value);
   } else {
-    string sim = str->substr(index + 2, str->length()-1);
+    string sim = str->substr(index + 2, str->length());
+    sim.erase(std::remove_if(sim.begin(), sim.end(), &Var::isParentheses), sim.end());
     data = new Data(varName, sim, sign, this->update_simulator_q, this->varName_data_map);
     if (sign == 2) {
       (*this->sim_num_map)[sim] = data;
@@ -31,7 +32,13 @@ int Var::execute(vector<string> *string_vec, int i) {
   (*this->str_command_map)[varName] = data;
   return 2;
 }
-
+bool Var::isParentheses(char c) {
+  switch (c) {
+    case '(':
+    case ')':return true;
+    default:return false;
+  }
+}
 int Var::getSign(string *str, int *index) {
   int i = 0;
   int found = str->find("->");
