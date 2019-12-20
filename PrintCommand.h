@@ -16,6 +16,5 @@ class PrintCommand : public Command {
   void execute(string *s);
  public:
   PrintCommand(unordered_map<string, Data *> *s) : symbol_table(s) {}
-
 };
 #endif //EX3_3__PRINTCOMMAND_H_
