@@ -13,6 +13,7 @@ class SleepCommand : public Command {
  public:
   int execute(vector<string>* string_vec,int i){
     sleep(stoi((*string_vec)[i])/1000);
+    return 2;
   }
 };
 #endif //EX3_3__SLEEPCOMMAND_H_

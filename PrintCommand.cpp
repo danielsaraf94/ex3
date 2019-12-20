@@ -14,4 +14,5 @@ int PrintCommand::execute(vector<string> *string_vec, int i) {
   } else {
     cout << s << endl;
   }
+  return 2;
 }
