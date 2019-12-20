@@ -59,7 +59,7 @@ void commandMapInit(unordered_map<string, Command *> *command_map,
 
   (*command_map)[string("connectControlClient")] = client;
 
-  Command *var_creator = new Var(symbol_table, sim_table);
+  Command *var_creator = new Var(command_map,symbol_table, sim_table,update_simulator_q);
 
   (*command_map)[string("var")] = var_creator;
 

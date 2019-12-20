@@ -3,13 +3,16 @@
 
 
 #include "Var.h"
-Var::Var(
-    unordered_map<string, Data *> *map1,
-    unordered_map<string, Data *> *map2) {
-  this->varName_data_map = map1;
-  this->sim_num_map = map2;
+Var::Var(unordered_map<string, Command *> *map1,
+         unordered_map<string, Data *> *map2,
+         unordered_map<string, Data *> *map3,
+         queue<string> *queue) {
+  this->str_command_map = map1;
+  this->varName_data_map = map2;
+  this->sim_num_map = map3;
+  this->update_simulator_q = queue;
 }
-int Var::execute(vector<string>* string_vec,int i) {
+int Var::execute(vector<string> *string_vec, int i) {
   string *str = &(*string_vec)[i];
   int index = 0;
   int sign = getSign(str, &index);
@@ -18,15 +21,17 @@ int Var::execute(vector<string>* string_vec,int i) {
   if (sign == 3) {
     string otherVar = str->substr(index + 1, str->length());
     double value = (*this->varName_data_map)[otherVar]->getValue();
-    data = new Data("", sign);
+    data = new Data(varName, "", sign, this->update_simulator_q, this->varName_data_map);
     data->setValue(value);
   } else {
     string sim = str->substr(index + 2, str->length());
-    data = new Data(sim, sign);
-    if (sign != 1)
+    data = new Data(varName, sim, sign, this->update_simulator_q, this->varName_data_map);
+    if (sign == 2) {
       (*this->sim_num_map)[sim] = data;
+    }
+    (*this->varName_data_map)[varName] = data;
   }
-  (*this->varName_data_map)[varName] = data;
+  (*this->str_command_map)[varName] = data;
   return 2;
 }
 
