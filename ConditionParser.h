@@ -8,12 +8,12 @@
 #include <Command.h>
 #include <unordered_map>
 #include "list"
-#include "queue"
+#include <queue>
 #include "Data.h"
 class ConditionParser: public Command {
   unordered_map<string, Data *> *symbol_table;
   unordered_map<string, Command *> *command_map;
-  queue<string> queue;
+  queue<string> q;
  public:
   ConditionParser(unordered_map<string, Command *>*,unordered_map<string, Data *>*);
   bool isTrue(string);

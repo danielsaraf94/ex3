@@ -29,8 +29,11 @@ bool WhileCommand::isTrue(string s) {
   i = len;
   right = s.substr(i, s.length() - i);
   left.erase(remove(left.begin(), left.end(), ' '), left.end());
+  left.erase(remove(left.begin(), left.end(), '('), left.end());
   oper.erase(remove(oper.begin(), oper.end(), ' '), oper.end());
   right.erase(remove(right.begin(), right.end(), ' '), right.end());
+  right.erase(remove(right.begin(), right.end(), ')'), right.end());
+  right.erase(remove(right.begin(), right.end(), '{'), right.end());
   regex rg("^[-+]?[0-9]+(\\.[0-9]+)?$");
   if (regex_match(left.begin(), left.end(), rg))
     l = stod(left);
