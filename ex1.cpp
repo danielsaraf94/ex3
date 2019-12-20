@@ -98,8 +98,8 @@ double Mul::calculate() {
 }
 
 double Div::calculate() {
-  if (expL->calculate() != 0)
-    return expR->calculate() / expL->calculate();
+  if (expR->calculate() != 0)
+    return expL->calculate() / expR->calculate();
   else throw "bad input";
 
 }

@@ -16,23 +16,30 @@ int Var::execute(vector<string> *string_vec, int i) {
   int sign = getSign(str, &index);
   string varName = str->substr(0, index);
   Data *data;
-  globals->locker.lock();
   if (sign == 3) {
     string otherVar = str->substr(index + 1, str->length());
+    globals->locker.lock();
     double value = (*this->varName_data_map)[otherVar]->getValue();
     data = new Data(varName, "", sign, this->update_simulator_q, this->varName_data_map,globals);
+    globals->locker.unlock();
     data->setValue(value);
   } else {
     string sim = str->substr(index + 2, str->length());
     sim.erase(std::remove_if(sim.begin(), sim.end(), &Var::isParentheses), sim.end());
+    globals->locker.lock();
     data = new Data(varName, sim, sign, this->update_simulator_q, this->varName_data_map,globals);
+    globals->locker.unlock();
     if (sign == 2) {
+      globals->locker.lock();
       (*this->sim_num_map)[sim] = data;
+      globals->locker.unlock();
     }
   }
+  globals->locker.lock();
   (*this->varName_data_map)[varName] = data;
   (*this->str_command_map)[varName] = data;
   globals->locker.unlock();
+
   return 2;
 }
 bool Var::isParentheses(char c) {

@@ -21,7 +21,8 @@ int ClientConnectCommand::execute(vector<string>* string_vec,int i) {
 
   address.sin_family = AF_INET;//IP4
   address.sin_addr.s_addr = inet_addr(ip.c_str());  //the localhost address
-  address.sin_port = htons(stoi(port));
+  Interpreter inter;
+  address.sin_port = htons((int)(inter.interpret(port)->calculate()));
   //we need to convert our number (both port & localhost)
   // to a number that the network understands
 
@@ -56,13 +57,13 @@ void ClientConnectCommand::extractAddressFromString(string *str) {
     break;
   }
   for (; i < s.length(); i++) {
-    if ((s[i] < '0' || s[i] > '9') && s[i] != '.')
+    if ((s[i] < '0' || s[i] > '9') && s[i] != '.' && s[i] != '(')
       continue;
     portStart = i;
     break;
   }
 
-  port = s.substr(portStart, 4);
+  port = s.substr(portStart, s.length()-portStart-1);
   ip = s.substr(ipStart, ipLen);
 }
 void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_table,
@@ -81,9 +82,9 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
     var_name = update_simulator_q->front();
     update_simulator_q->pop();
     var = symbol_table->find(var_name)->second;
-    g->locker.unlock();
     string sim = var->getSim().substr(1, var->getSim().length());
     string s = "set " + var->getSim() + " " + to_string(var->getValue()) + "\r\n";
+    g->locker.unlock();
     char c[s.length() + 1];
     strcpy(c, s.c_str());
     int is_sent = send(*client_socket, c, strlen(c), 0);

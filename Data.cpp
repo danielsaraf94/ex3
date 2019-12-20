@@ -12,21 +12,24 @@ int Data::execute(vector<string> *string_vec, int j) {
   string str = (*string_vec)[j];
   int i = 0,l=0;
   Interpreter interpreter;
-  globals->locker.lock();
   while(i<=str.length()){
     i = getIndexAfterOp(str,l);
     l= getIndexBeforeOp(str,i);
     string varName = str.substr(i,l-i);
+    varName.erase(remove(varName.begin(), varName.end(), ')'), varName.end());
+    varName.erase(remove(varName.begin(), varName.end(), '('), varName.end());
+    globals->locker.lock();
     if(this->symbol_table->find(varName)==this->symbol_table->end()){
+      globals->locker.unlock();
       i=l+1;
       continue;
     }
     Data* data=(*this->symbol_table)[varName];
+    globals->locker.unlock();
     string value = std::to_string(data->getValue());
     interpreter.setVariables(varName+"="+value);
     i=l+1;
   }
-  globals->locker.unlock();
   try{
     string expression = str.substr(1);
     double newValue = interpreter.interpret(expression)->calculate();

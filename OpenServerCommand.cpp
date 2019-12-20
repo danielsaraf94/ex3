@@ -111,8 +111,8 @@ void OpenServerCommand::readFromClient(int client_socket,
       }
       glob->locker.lock();
       (*sim_table)[(*numTosim)[i]]->setValue(strtod(end, &end));
-      end++;
       glob->locker.unlock();
+      end++;
     }
   }
   close(server_socket);
