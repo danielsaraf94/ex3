@@ -8,6 +8,8 @@ PrintCommand::PrintCommand(unordered_map<string, Data *> *s) {
 }
 int PrintCommand::execute(vector<string> *string_vec, int i) {
   string s = (*string_vec)[i];
+  s.erase(std::remove(s.begin(), s.end(), ')'), s.end());
+  s.erase(std::remove(s.begin(), s.end(), '('), s.end());
   Data *d = (*symbol_table)[s];
   if (d) {
     cout << d->getValue() << endl;

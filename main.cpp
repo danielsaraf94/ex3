@@ -11,7 +11,6 @@
 #include "Var.h"
 #include "SleepCommand.h"
 #include <algorithm>
-#include <regex>
 #include "ConditionParser.h"
 #include "WhileCommand.h"
 
@@ -87,24 +86,6 @@ void parse(vector<string> &string_vec,
     Command *c = command_map[string_vec[i]];
     if (c) {
       i += c->execute(&string_vec, i + 1);
-    } else {
-      if (symbol_table[string_vec[i]]) {
-        varAssign(string_vec[i], string_vec[i + 1], symbol_table, update_simulator_q);
-        i += 2;
-      }
-
     }
-  }
-  while (true) {}
-}
-void varAssign(string &varName, string &str, unordered_map<string, Data *> &symbol_table,
-               queue<string> &update_simulator_q) {
-  char op = str[0];
-  const char *s = str.substr(1).c_str();
-  double value = atof(s);
-  if (value != -1 && op == '=') {
-    symbol_table[varName]->setValue(value);
-    if (symbol_table[varName]->getSign() == 1)
-      update_simulator_q.push(varName);
   }
 }
