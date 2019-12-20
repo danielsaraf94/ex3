@@ -15,11 +15,11 @@ using namespace std;
 
 class Var : public Command {
   unordered_map<string, Data *> *varName_data_map;
-  unordered_map<string, Data*> *sim_num_map;
+  unordered_map<string, Data *> *sim_num_map;
   int getSign(string *, int *);
  public:
-  Var(unordered_map<string, Data *> *, unordered_map<string,Data*>*);
-  void execute(string *);
+  Var(unordered_map<string, Data *> *, unordered_map<string, Data *> *);
+  int execute(vector<string> *, int);
   ~Var() {};
 };
 

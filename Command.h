@@ -5,11 +5,12 @@
 #ifndef EX3__COMMAND_H_
 #define EX3__COMMAND_H_
 #include "iostream"
+#include "vector"
 using namespace std;
 class Command {
  public:
   Command() {};
-  virtual void execute(string*) = 0;
+  virtual int execute(vector<string>*,int) = 0;
   virtual ~Command() {};
 };
 

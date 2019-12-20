@@ -6,8 +6,8 @@
 ClientConnectCommand::ClientConnectCommand(unordered_map<string, Data *> *s_t, queue<string> *u_s_q, Globals *g)
     : symbol_table(s_t), update_simulator_q(u_s_q), glob(g) {
 }
-void ClientConnectCommand::execute(string *s) {
-  extractAddressFromString(s);
+int ClientConnectCommand::execute(vector<string>* string_vec,int i) {
+  extractAddressFromString(&(*string_vec)[i]);
 
   //create socket
   client_socket = socket(AF_INET, SOCK_STREAM, 0);

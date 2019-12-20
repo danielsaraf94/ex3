@@ -3,11 +3,15 @@
 
 #include "PrintCommand.h"
 
-void PrintCommand::execute(string *s) {
-  Data *d = (*symbol_table)[*s];
+PrintCommand::PrintCommand(unordered_map<string, Data *> *s) {
+  this->symbol_table = s;
+}
+int PrintCommand::execute(vector<string> *string_vec, int i) {
+  string s = (*string_vec)[i];
+  Data *d = (*symbol_table)[s];
   if (d) {
     cout << d->getValue() << endl;
   } else {
-    cout << *s << endl;
+    cout << s << endl;
   }
 }

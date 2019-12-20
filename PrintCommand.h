@@ -1,8 +1,8 @@
 //
 // Created by daniels on 19/12/2019.
 
-#ifndef EX3_3__PRINTCOMMAND_H_
-#define EX3_3__PRINTCOMMAND_H_
+#ifndef EX3_3_PRINTCOMMAND_H
+#define EX3_3_PRINTCOMMAND_H
 
 #include "Command.h"
 #include "iostream"
@@ -13,8 +13,8 @@ using namespace std;
 
 class PrintCommand : public Command {
   unordered_map<string, Data *> *symbol_table;
-  void execute(string *s);
  public:
-  PrintCommand(unordered_map<string, Data *> *s) : symbol_table(s) {}
+  int execute(vector<string>*,int);
+  PrintCommand(unordered_map<string, Data *> *s);
 };
-#endif //EX3_3__PRINTCOMMAND_H_
+#endif //EX3_3_PRINTCOMMAND_H

@@ -9,7 +9,8 @@ Var::Var(
   this->varName_data_map = map1;
   this->sim_num_map = map2;
 }
-void Var::execute(string *str) {
+int Var::execute(vector<string>* string_vec,int i) {
+  string *str = &(*string_vec)[i];
   int index = 0;
   int sign = getSign(str, &index);
   string varName = str->substr(0, index);
@@ -26,6 +27,7 @@ void Var::execute(string *str) {
       (*this->sim_num_map)[sim] = data;
   }
   (*this->varName_data_map)[varName] = data;
+  return 2;
 }
 
 int Var::getSign(string *str, int *index) {

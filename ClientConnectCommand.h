@@ -34,7 +34,7 @@ class ClientConnectCommand : public Command {
  public:
   thread t;
   ClientConnectCommand(unordered_map<string, Data *> *, queue<string> *, Globals *);
-  void execute(string *);
+  int execute(vector<string>*,int);
   void extractAddressFromString(string *);
   static void updateServer(unordered_map<string, Data *> *, queue<string> *, int *,Globals*);
 };

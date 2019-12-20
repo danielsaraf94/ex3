@@ -10,8 +10,9 @@
 using namespace std;
 
 class SleepCommand : public Command {
-  void execute(string *s){
-    sleep(stoi(*s)/1000);
+ public:
+  int execute(vector<string>* string_vec,int i){
+    sleep(stoi((*string_vec)[i])/1000);
   }
 };
 #endif //EX3_3__SLEEPCOMMAND_H_

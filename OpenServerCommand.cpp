@@ -15,8 +15,8 @@ OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map, Globals
   }
   initialSimToNumMap();
 }
-void OpenServerCommand::execute(string *str) {
-  const char *portName = str->c_str();
+int OpenServerCommand::execute(vector<string>* string_vec,int i) {
+  const char *portName = (*string_vec)[i].c_str();
   int port = atoi(portName);
   //bind socket to IP address
   // we first need to create the sockaddr obj.
@@ -48,6 +48,7 @@ void OpenServerCommand::execute(string *str) {
   }
   cout << "simulator connected" << endl;
   t = thread(readFromClient, client_socket, this->socketfd, glob, sim_table, &numTosim);
+  return 2;
 }
 
 void OpenServerCommand::initialSimToNumMap() {
