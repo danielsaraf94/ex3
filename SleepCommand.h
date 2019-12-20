@@ -12,7 +12,8 @@ using namespace std;
 class SleepCommand : public Command {
  public:
   int execute(vector<string>* string_vec,int i){
-    sleep(stoi((*string_vec)[i])/1000);
+    Interpreter interpreter;
+    sleep(interpreter.interpret((*string_vec)[i])->calculate()/1000);
     return 2;
   }
 };
