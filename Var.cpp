@@ -15,13 +15,20 @@ int Var::execute(vector<string> *string_vec, int i) {
   int index = 0;
   int sign = getSign(str, &index);
   string varName = str->substr(0, index);
+  Interpreter inter;
+  try{
+    inter.setVariables(varName+"=0");
+  }catch(...){
+    cerr<<"bad variable's name input"<<endl;
+    exit(1);
+  }
   Data *data;
   if (sign == 3) {
     string otherVar = str->substr(index + 1, str->length());
     globals->locker.lock();
     data = new Data(varName, "", sign, this->update_simulator_q, this->varName_data_map,globals);
-    data->execute(string_vec,i);
     globals->locker.unlock();
+    data->execute(string_vec,i);
   } else {
     string sim = str->substr(index + 2, str->length());
     sim.erase(std::remove_if(sim.begin(), sim.end(), &Var::isParentheses), sim.end());
