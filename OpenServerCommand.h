@@ -23,7 +23,6 @@ class OpenServerCommand : public Command {
  unordered_map<string, Data *> *sim_table;
  Globals* glob;
  public:
-  thread t;
   OpenServerCommand(unordered_map<string, Data *> *map,Globals*);
   void initialSimToNumMap();
   int execute(vector<string> *,int);

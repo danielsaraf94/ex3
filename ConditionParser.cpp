@@ -54,6 +54,7 @@ bool ::ConditionParser::isTrue(string str) {
   d.replace(str, s1, s2);
   d.replace(str, s3, s4);
   d.replace(str, s5, s6);
+  d.replace(str, s5, s6);
   d.replace(str, s7, s8);
   int i = 0, l = 0;
   Interpreter interpreter;
@@ -82,7 +83,10 @@ bool ::ConditionParser::isTrue(string str) {
   try {
     string expression = str.substr(0);
     expression.erase(remove(expression.begin(), expression.end(), '{'), expression.end());
-    return interpreter.interpret(expression)->calculate()!=0;
+    auto *exp = interpreter.interpret(expression);
+    int result = exp->calculate();
+    delete(exp);
+    return result;
   } catch (...) {
    // cerr << "Something went wrong with the interpretation" << endl;
   }

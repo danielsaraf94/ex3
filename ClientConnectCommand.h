@@ -32,7 +32,6 @@ class ClientConnectCommand : public Command {
   int client_socket;
   Globals *glob;
  public:
-  thread t;
   ClientConnectCommand(unordered_map<string, Data *> *, queue<string> *, Globals *);
   int execute(vector<string>*,int);
   void extractAddressFromString(string *);

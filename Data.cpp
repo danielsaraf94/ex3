@@ -54,7 +54,9 @@ int Data::execute(vector<string> *string_vec, int j) {
   replace(str, s8, s7);
   try {
     string expression = str.substr(1);
-    double newValue = interpreter.interpret(expression)->calculate();
+    auto* exp =interpreter.interpret(expression);
+    double newValue = exp->calculate();
+    delete(exp);
     setValue(newValue);
   } catch (...) {
     cerr << "Something went wrong with the interpretation" << endl;

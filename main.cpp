@@ -18,9 +18,9 @@ int main(int argc, char *argv[]) {
   }
   CommandManager manager{&string_vec,&g};
   parse(string_vec,&manager);
-  g.to_close = true;
   cout<<"closing threads and free memory"<<endl;
-  sleep(5);
+  g.to_close = true;
+  sleep(2);
 }
 
 void parse(vector<string> &string_vec,CommandManager* manger) {

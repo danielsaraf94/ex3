@@ -26,7 +26,6 @@ class Var : public Command {
       ,queue<string> *,Globals*);
   int execute(vector<string> *, int);
   static bool isParentheses(char);
-  ~Var() {};
 };
 
 #endif //EX3_VAR_H

@@ -22,7 +22,9 @@ int ClientConnectCommand::execute(vector<string> *string_vec, int i) {
   address.sin_family = AF_INET;//IP4
   address.sin_addr.s_addr = inet_addr(ip.c_str());  //the localhost address
   Interpreter inter;
-  address.sin_port = htons((int) (inter.interpret(port)->calculate()));
+  auto* exp = inter.interpret(port);
+  address.sin_port = htons((int) (exp->calculate()));
+  delete(exp);
   //we need to convert our number (both port & localhost)
   // to a number that the network understands
 
@@ -36,7 +38,7 @@ int ClientConnectCommand::execute(vector<string> *string_vec, int i) {
   } else {
     std::cout << "connected succeeded" << std::endl;
   }
-  t = thread(updateServer, symbol_table, update_simulator_q, &client_socket, glob);
+  thread t(updateServer, symbol_table, update_simulator_q, &client_socket, glob);
   t.detach();
   return 2;
 }
@@ -70,7 +72,7 @@ void ClientConnectCommand::extractAddressFromString(string *str) {
 void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_table,
                                         queue<string> *update_simulator_q,
                                         int *client_socket, Globals *g) {
-  string var_name;
+ string var_name;
   Data *var;
   bool is_q_empty = true;
   while (!(g->to_close)) {
@@ -96,7 +98,6 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
     is_q_empty = true;
   }
   close(*client_socket);
-  this->detach();
-  terminate();
+
 }
 

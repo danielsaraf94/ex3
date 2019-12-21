@@ -49,14 +49,7 @@ unordered_map<string, Data *> *CommandManager::getSimMap() {
 CommandManager::~CommandManager() {
   for (pair<string, Command *> p : this->command_map) {
     Command *c = p.second;
-    delete (c);
-  }
-  for (pair<string, Data *> p : this->symbol_table) {
-    Data* d = p.second;
-    delete (d);
-  }
-  for (pair<string, Data *> p : this->sim_table) {
-    Data* d = p.second;
-    delete (d);
+    if (c)
+     delete (c);
   }
 }

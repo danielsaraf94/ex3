@@ -13,7 +13,9 @@ class SleepCommand : public Command {
  public:
   int execute(vector<string>* string_vec,int i){
     Interpreter interpreter;
-    sleep(interpreter.interpret((*string_vec)[i])->calculate()/1000);
+    auto *exp = interpreter.interpret((*string_vec)[i]);
+    sleep(exp->calculate()/1000);
+    delete(exp);
     return 2;
   }
 };

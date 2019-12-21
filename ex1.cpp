@@ -53,12 +53,10 @@ double Variable::getValue() const {
 Variable::Variable(string n, double v) {
   // check if the variable name is valid
   if (n[0] >= '0' && n[0] <= '9')
-  {cout<<"1"<<endl;
-    throw "bad input";}
+    throw "bad input";
   for (char i : n) {
     if (!((i >= '0' && i <= '9') || i == '_' || (i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z'))) {
-      {cout<<"2"<<endl;
-        throw "bad input";}
+      throw "bad input";
     }
   }
   name = n;
@@ -104,8 +102,7 @@ double Mul::calculate() {
 double Div::calculate() {
   if (expR->calculate() != 0)
     return expL->calculate() / expR->calculate();
-  else   {cout<<"3"<<endl;
-    throw "bad input";}
+  else throw "bad input";
 
 }
 
@@ -147,23 +144,19 @@ void Interpreter::setVariables(string s) {
 }
 
 void Interpreter::stringToVariable(string s) {
-  if (!isValidVariableString(s))   {cout<<"4"<<endl;
-    throw "bad input";}
+  if (!isValidVariableString(s)) throw "bad input";
   int j, k = 0;
   string name;
   double val;
   // extract the name
   j = s.substr(k, s.length()).find('=');
-  if (j == -1)   {cout<<"5"<<endl;
-    throw "bad input";}
+  if (j == -1) throw "bad input";
   name = s.substr(k, j);
   // check the variable name validation
-  if (name[0] >= '0' && name[0] <= '9')  {cout<<"6"<<endl;
-    throw "bad input";}
+  if (name[0] >= '0' && name[0] <= '9') throw "bad input";
   for (char i : name) {
     if (!((i >= '0' && i <= '9') || i == '_' || (i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z'))) {
-      {cout<<"7"<<endl;
-        throw "bad input";}
+      throw "bad input";
     }
   }
 
@@ -175,13 +168,11 @@ void Interpreter::stringToVariable(string s) {
   //check if the string-value represent a valid double
   //check if first or last char is '.'
   if (s.substr(k, j)[0] == '.' || s.substr(k, j)[s.substr(k, j).length() - 1] == '.')
-  {cout<<"8"<<endl;
-    throw "bad input";}
+    throw "bad input";
   //check if there is any non valid character in the string, or more than 1 '.'/'+'/'-'
   for (char i : s.substr(k, j)) {
     if (((i < '0' || i > '9') && i != '.' && i != '+' && i != '-') || dotCounter > 1 || MinusOrPlus > 1) {
-      {cout<<"9"<<endl;
-        throw "bad input";}
+      throw "bad input";
     }
     if (i == '.') dotCounter++;
     if (i == '+' || i == '-') MinusOrPlus++;
@@ -189,11 +180,9 @@ void Interpreter::stringToVariable(string s) {
   //check if the minus/plus in the right place
   if (MinusOrPlus == 1) {
     if (s.substr(k, j)[0] != '+' && s.substr(k, j)[0] != '-') {
-      {cout<<"10"<<endl;
-        throw "bad input";}
+      throw "bad input";
     }
-    if (s.substr(k, j)[1] == '.')   {cout<<"11"<<endl;
-      throw "bad input";}
+    if (s.substr(k, j)[1] == '.') throw "bad input";
   }
 
   const char *value = s.substr(k, j).c_str();
@@ -208,8 +197,7 @@ Expression *Interpreter::interpret(string stringExp) {
   stringExp = regex_replace(stringExp, regex("=="), "@");
   stringExp = regex_replace(stringExp, regex("!="), "!");
   if (!validParenthesis(stringExp) || stringExp.length() == 0)
-  {cout<<"12"<<endl;
-    throw "bad input";}
+    throw "bad input";
 
   stack<string> s;
   queue<string> q;
@@ -262,11 +250,9 @@ string Interpreter::getLetter(string s, int &k) {
   if (isOperator(s.substr(start, 1))) {
     if (!((s.substr(start, 1) == "(") || (s.substr(start, 1) == ")")))
       if (((s.substr(start + 1, 1) == "*") || (s.substr(start + 1, 1) == "/")))
-      {cout<<"13"<<endl;
-        throw "bad input";}
+        throw "bad input";
     if ((s.substr(start, 1) == ")") && (s.substr(start + 1, 1) == "("))
-    {cout<<"14"<<endl;
-      throw "bad input";}
+      throw "bad input";
     //Unary operators
     if (s.substr(start, 1) == "+" || s.substr(start, 1) == "-") {
       if (k == 0) {
@@ -327,8 +313,7 @@ bool Interpreter::isVariable(string s) {
   }
   // check if the variable exist in the variables map
   if (vMap.find(s) == vMap.end()) {
-      {cout<<"15"<<endl;
-        throw "bad input";}
+    throw "bad input";
   } else { return true; }
 }
 
@@ -359,8 +344,7 @@ Expression *Interpreter::expressionCreator(queue<string> q) {
   while (!q.empty()) {
     if (isOperator(q.front())) {
       if (q.front() == "^" || q.front() == "%") {
-        if (s.empty())   {cout<<"16"<<endl;
-          throw "bad input";}
+        if (s.empty()) throw "bad input";
         left = s.top();
         s.pop();
         if (q.front() == "^") {
@@ -368,17 +352,14 @@ Expression *Interpreter::expressionCreator(queue<string> q) {
         } else if (q.front() == "%") {
           s.push(new UMinus(left));
         } else {
-          {cout<<"17"<<endl;
-            throw "bad input";}
+          throw "bad input";
         }
         q.pop();
       } else {
-        if (s.empty())  {cout<<"18"<<endl;
-          throw "bad input";}
+        if (s.empty()) throw "bad input";
         left = s.top();
         s.pop();
-        if (s.empty())  {cout<<"19"<<endl;
-          throw "bad input";}
+        if (s.empty()) throw "bad input";
         right = s.top();
         s.pop();
         if (q.front() == "+") {
@@ -402,9 +383,7 @@ Expression *Interpreter::expressionCreator(queue<string> q) {
         } else if (q.front() == "!") {
           s.push(new NotEqual(left, right));
         } else {
-          {cout<<"20"<<endl;
-            throw "bad input";}
-
+          throw "bad input";
         }
         q.pop();
       }
@@ -419,7 +398,6 @@ Expression *Interpreter::expressionCreator(queue<string> q) {
 
   }
   return s.top();
-
 }
 
 bool Interpreter::validParenthesis(string s) {

@@ -16,9 +16,11 @@ OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map, Globals
   }
   initialSimToNumMap();
 }
-int OpenServerCommand::execute(vector<string>* string_vec,int i) {
+int OpenServerCommand::execute(vector<string> *string_vec, int i) {
   Interpreter interpreter;
-  double port = interpreter.interpret((*string_vec)[i])->calculate();
+  auto *exp = interpreter.interpret((*string_vec)[i]);
+  double port = exp->calculate();
+  delete(exp);
   //bind socket to IP address
   // we first need to create the sockaddr obj.
   sockaddr_in address; //in means IP4
@@ -48,7 +50,7 @@ int OpenServerCommand::execute(vector<string>* string_vec,int i) {
     exit(1);
   }
   cout << "simulator connected" << endl;
-  t = thread(readFromClient, client_socket, this->socketfd, glob, sim_table, &numTosim);
+  thread t(readFromClient, client_socket, this->socketfd, glob, sim_table, &numTosim);
   t.detach();
   return 2;
 }
@@ -105,7 +107,7 @@ void OpenServerCommand::readFromClient(int client_socket,
     int valread = read(client_socket, buffer, 1024);
     char *end = buffer;
     for (int i = 0; i < 36; i++) {
-      if(glob->to_close) break;
+      if (glob->to_close) break;
       if (sim_table->find((*numTosim)[i]) == sim_table->end()) {
         strtod(end, &end);
         end++;
@@ -118,5 +120,4 @@ void OpenServerCommand::readFromClient(int client_socket,
     }
   }
   close(server_socket);
-  terminate();
 }
