@@ -3,6 +3,7 @@
 //
 
 #include "CommandManager.h"
+#include "FuncCommand.h"
 CommandManager::CommandManager(vector<string> *vector, Globals *g) {
   this->string_vec = vector;
   this->globals = g;
@@ -47,11 +48,22 @@ unordered_map<string, Data *> *CommandManager::getSymbolMap() {
 unordered_map<string, Data *> *CommandManager::getSimMap() {
   return &this->sim_table;
 }
+int CommandManager::addFuncCommand(int index) {
+  int varLoc = (*this->string_vec)[index].find("var");
+  if(varLoc>-1){
+    string varName = (*this->string_vec)[index].substr(3);
+    (*string_vec)[index]="var";
+    string_vec->push_back(varName);
+  }
+  FuncCommand* func = new FuncCommand(this->string_vec,index,this);
+  command_map[(*this->string_vec)[index-1]]=func;
+  return func->returnIndex();
+}
 // realise all the allocated memory
 CommandManager::~CommandManager() {
   for (pair<string, Command *> p : this->command_map) {
     Command *c = p.second;
     if (c)
-     delete (c);
+      delete (c);
   }
 }

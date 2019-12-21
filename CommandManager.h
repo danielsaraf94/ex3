@@ -32,6 +32,7 @@ class CommandManager {
   unordered_map<string,Command*>* getCommnadMap();
   unordered_map<string,Data*>* getSymbolMap();
   unordered_map<string,Data*>* getSimMap();
+  int addFuncCommand(int);
   ~CommandManager();
 
 };
