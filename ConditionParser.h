@@ -5,7 +5,7 @@
 #ifndef EX3_1_CMAKE_BUILD_DEBUG_CONDITIONPARSER_H_
 #define EX3_1_CMAKE_BUILD_DEBUG_CONDITIONPARSER_H_
 
-#include <Command.h>
+#include "Command.h"
 #include <unordered_map>
 #include "list"
 #include <queue>

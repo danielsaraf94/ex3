@@ -1,9 +1,9 @@
 //
-// Created by shlomo on 13/12/2019.
+// Created by daniels on 21/12/2019.
 //
 
-#ifndef EX3__COMMAND_H_
-#define EX3__COMMAND_H_
+#ifndef EX3_3__COMMAND_H_
+#define EX3_3__COMMAND_H_
 #include "iostream"
 #include "vector"
 using namespace std;
@@ -14,5 +14,5 @@ class Command {
   virtual ~Command() {};
 };
 
-#endif //EX3__COMMAND_H_
 
+#endif //EX3_3__COMMAND_H_
