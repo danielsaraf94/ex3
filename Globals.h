@@ -10,5 +10,6 @@ class Globals {
  public:
   mutex locker;
   bool to_close;
+  Globals() { this->to_close = false; }
 };
 #endif //EX3_3__GLOBALS_H_

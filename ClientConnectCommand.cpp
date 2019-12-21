@@ -37,6 +37,7 @@ int ClientConnectCommand::execute(vector<string> *string_vec, int i) {
     std::cout << "connected succeeded" << std::endl;
   }
   t = thread(updateServer, symbol_table, update_simulator_q, &client_socket, glob);
+  t.detach();
   return 2;
 }
 void ClientConnectCommand::extractAddressFromString(string *str) {
@@ -95,5 +96,7 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
     is_q_empty = true;
   }
   close(*client_socket);
+  this->detach();
+  terminate();
 }
 

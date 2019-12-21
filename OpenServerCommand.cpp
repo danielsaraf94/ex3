@@ -49,6 +49,7 @@ int OpenServerCommand::execute(vector<string>* string_vec,int i) {
   }
   cout << "simulator connected" << endl;
   t = thread(readFromClient, client_socket, this->socketfd, glob, sim_table, &numTosim);
+  t.detach();
   return 2;
 }
 
@@ -117,4 +118,5 @@ void OpenServerCommand::readFromClient(int client_socket,
     }
   }
   close(server_socket);
+  terminate();
 }

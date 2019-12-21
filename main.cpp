@@ -10,7 +10,6 @@ void parse(vector<string> &,CommandManager*);
 
 int main(int argc, char *argv[]) {
   Globals g;
-  g.to_close = false;
   Lexer lex(argv[1]);
   vector<string> string_vec;
   if (!lex.lexer(&string_vec)) {
@@ -20,6 +19,7 @@ int main(int argc, char *argv[]) {
   CommandManager manager{&string_vec,&g};
   parse(string_vec,&manager);
   g.to_close = true;
+  cout<<"closing threads and free memory"<<endl;
   sleep(5);
 }
 
