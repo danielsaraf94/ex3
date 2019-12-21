@@ -18,7 +18,7 @@ bool Lexer::lexer(vector<string> *vector) {
   }
   string line;
   while (getline(input_file, line)) {
-    if(line==""){
+    if (line == "") {
       continue;
     }
     int i = separationLoc(line);
@@ -28,7 +28,7 @@ bool Lexer::lexer(vector<string> *vector) {
     command.erase(std::remove_if(command.begin(), command.end(), &isSpace), command.end());
     command.erase(std::remove(command.begin(), command.end(), '\t'), command.end());
     vector->push_back(command);
-    if (i != line.length()) {
+    if (i != (int) line.length()) {
       string args = line.substr(i, line.length());
       if (command != "Print") {
         args.erase(std::remove_if(args.begin(), args.end(), &Lexer::isSpace), args.end());
@@ -47,16 +47,18 @@ bool Lexer::lexer(vector<string> *vector) {
 }
 int Lexer::separationLoc(string &str) {
   bool flag = false;
-  for (int i = 1; i < str.length(); i++) {
+  int i;
+  for (i = 1; i < (int) str.length(); i++) {
     char c = str[i];
     if (c != ' ') {
       flag = true;
     }
     if ((c == ' ' && flag) || c == '(' || c == '=' || c == '>' || c == '<' || c == '+' || c == '/' || c == '*'
         || c == '-') {
-      return i;
+      break;
     }
   }
+  return i;
 }
 bool Lexer::isParenthesesOrApos(char c) {
   switch (c) {

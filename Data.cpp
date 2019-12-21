@@ -30,22 +30,22 @@ int Data::execute(vector<string> *string_vec, int j) {
   int i = 0, l = 0;
   Interpreter interpreter;
   str=str.substr(getIndexBeforeOp(str,0));
-  while (i <= str.length()) {
+  while (i <= (int)str.length()) {
     i = getIndexAfterOp(str, l);
     l = getIndexBeforeOp(str, i);
-    string varName = str.substr(i, l - i);
-    varName.erase(remove(varName.begin(), varName.end(), ')'), varName.end());
-    varName.erase(remove(varName.begin(), varName.end(), '('), varName.end());
+    string variable_name = str.substr(i, l - i);
+    variable_name.erase(remove(variable_name.begin(), variable_name.end(), ')'), variable_name.end());
+    variable_name.erase(remove(variable_name.begin(), variable_name.end(), '('), variable_name.end());
     globals->locker.lock();
-    if (this->symbol_table->find(varName) == this->symbol_table->end()) {
+    if (this->symbol_table->find(variable_name) == this->symbol_table->end()) {
       globals->locker.unlock();
       i = l + 1;
       continue;
     }
-    Data *data = (*this->symbol_table)[varName];
+    Data *data = (*this->symbol_table)[variable_name];
     globals->locker.unlock();
-    string value = std::to_string(data->getValue());
-    interpreter.setVariables(varName + "=" + value);
+    string value_str = std::to_string(data->getValue());
+    interpreter.setVariables(variable_name + "=" + value_str);
     i = l + 1;
   }
   replace(str, s2, s1);
@@ -64,7 +64,7 @@ int Data::execute(vector<string> *string_vec, int j) {
   return 2;
 }
 int Data::getIndexBeforeOp(string str, int i) {
-  for (; i < str.length(); i++) {
+  for (; i < (int)str.length(); i++) {
     if (str[i] == '=' || str[i] == '<' || str[i] == '>' || str[i] == '/' || str[i] == '*' || str[i] == '+'
         || str[i] == '-' || str[i] == '$' || str[i] == '%' || str[i] == '^' || str[i] == '&') {
       break;
@@ -73,7 +73,7 @@ int Data::getIndexBeforeOp(string str, int i) {
   return i;
 }
 int Data::getIndexAfterOp(string str, int i) {
-  for (; i < str.length(); i++) {
+  for (; i < (int)str.length(); i++) {
     if (!(str[i] == '=' || str[i] == '<' || str[i] == '>' || str[i] == '/' || str[i] == '*' || str[i] == '+'
         || str[i] == '-' || str[i] == '$' || str[i] == '%' || str[i] == '^' || str[i] == '&')) {
       break;

@@ -4,8 +4,8 @@
 
 #include <regex>
 #include "WhileCommand.h"
-WhileCommand::WhileCommand(unordered_map<string, Command *> *c_m, vector<string> *s_v)
-    : c_m(c_m), s_v(s_v) {
+WhileCommand::WhileCommand(unordered_map<string, Command *> *cm, vector<string> *sv)
+    : c_m(cm), s_v(sv) {
 }
 int WhileCommand::execute(vector<string> *string_vec, int i) {
   string condition = (*string_vec)[i];

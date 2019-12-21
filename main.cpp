@@ -10,7 +10,7 @@ void parse(vector<string> &,CommandManager*);
 
 int main(int argc, char *argv[]) {
   Globals g;
-  Lexer lex(argv[1]);
+  Lexer lex(argv[argc-1]);
   vector<string> string_vec;
   if (!lex.lexer(&string_vec)) {
     cout << "error - can't open fly.txt" << endl;
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 
 void parse(vector<string> &string_vec,CommandManager* manger) {
   unordered_map<string,Command*>* command_map = manger->getCommnadMap();
-  for (int i = 0; i < string_vec.size();) {
+  for (int i = 0; i < (int)string_vec.size();) {
     Command *c = (*command_map)[string_vec[i]];
     if (c) {
       i += c->execute(&string_vec, i + 1);

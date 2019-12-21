@@ -101,10 +101,9 @@ void OpenServerCommand::readFromClient(int client_socket,
                                        unordered_map<int, string> *numTosim) {
 
   char buffer[1024] = {0};
-  char *p = buffer;
   while (!glob->to_close) {
     this_thread::sleep_for(std::chrono::milliseconds(10));
-    int valread = read(client_socket, buffer, 1024);
+    read(client_socket, buffer, 1024);
     char *end = buffer;
     for (int i = 0; i < 36; i++) {
       if (glob->to_close) break;

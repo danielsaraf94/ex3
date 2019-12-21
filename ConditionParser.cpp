@@ -25,16 +25,16 @@ int ConditionParser::execute(vector<string> *string_vec, int i) {
 
 int ConditionParser::returnIndex(vector<string> *string_vec, int i) {
 
-  while ((*string_vec)[i].find("{") == -1) {
+  while ((int)(*string_vec)[i].find("{") == -1) {
     i++;
   }
   this->q.push("{");
   i++;
   while (!this->q.empty()) {
-    if ((*string_vec)[i].find("{") != -1) {
+    if ((int)(*string_vec)[i].find("{") != -1) {
       this->q.push("{");
     }
-    if ((*string_vec)[i].find("}") != -1) {
+    if ((int)(*string_vec)[i].find("}") != -1) {
       this->q.pop();
     }
     i++;
@@ -58,7 +58,7 @@ bool ::ConditionParser::isTrue(string str) {
   d.replace(str, s7, s8);
   int i = 0, l = 0;
   Interpreter interpreter;
-  while (i <= str.length()) {
+  while (i <= (int)str.length()) {
     i = d.getIndexAfterOp(str, l);
     l = d.getIndexBeforeOp(str, i);
     string varName = str.substr(i, l - i);
@@ -88,6 +88,7 @@ bool ::ConditionParser::isTrue(string str) {
     delete(exp);
     return result;
   } catch (...) {
-   // cerr << "Something went wrong with the interpretation" << endl;
+   cerr << "Something went wrong with the interpretation" << endl;
+    return false;
   }
 }

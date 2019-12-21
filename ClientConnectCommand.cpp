@@ -22,9 +22,9 @@ int ClientConnectCommand::execute(vector<string> *string_vec, int i) {
   address.sin_family = AF_INET;//IP4
   address.sin_addr.s_addr = inet_addr(ip.c_str());  //the localhost address
   Interpreter inter;
-  auto* exp = inter.interpret(port);
+  auto *exp = inter.interpret(port);
   address.sin_port = htons((int) (exp->calculate()));
-  delete(exp);
+  delete (exp);
   //we need to convert our number (both port & localhost)
   // to a number that the network understands
 
@@ -44,22 +44,22 @@ int ClientConnectCommand::execute(vector<string> *string_vec, int i) {
 }
 void ClientConnectCommand::extractAddressFromString(string *str) {
   string s = *str;
-  int ipStart = 0, ipLen = 0, portStart = 0, portEnd = 0;
+  int ipStart = 0, ipLen = 0, portStart = 0;
   int i;
-  for (i = 0; i < s.length(); i++) {
+  for (i = 0; i < (int) s.length(); i++) {
     if ((s[i] < '0' || s[i] > '9') && s[i] != '.')
       continue;
     ipStart = i;
     break;
   }
-  for (; i < s.length(); i++) {
+  for (; i < (int) s.length(); i++) {
     if ((s[i] >= '0' && s[i] <= '9') || s[i] == '.') {
       ipLen++;
       continue;
     }
     break;
   }
-  for (; i < s.length(); i++) {
+  for (; i < (int) s.length(); i++) {
     if ((s[i] < '0' || s[i] > '9') && s[i] != '.' && s[i] != '(')
       continue;
     portStart = i;
@@ -72,7 +72,7 @@ void ClientConnectCommand::extractAddressFromString(string *str) {
 void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_table,
                                         queue<string> *update_simulator_q,
                                         int *client_socket, Globals *g) {
- string var_name;
+  string var_name;
   Data *var;
   bool is_q_empty = true;
   while (!(g->to_close)) {
@@ -81,7 +81,7 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
       if (!update_simulator_q->empty()) is_q_empty = false;
       g->locker.unlock();
     }
-    if(g->to_close) break;
+    if (g->to_close) break;
     g->locker.lock();
     var_name = update_simulator_q->front();
     update_simulator_q->pop();
@@ -89,9 +89,10 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
     string sim = var->getSim().substr(1, var->getSim().length());
     string s = "set " + var->getSim() + " " + to_string(var->getValue()) + "\r\n";
     g->locker.unlock();
-    char c[s.length() + 1];
+    char *c = new char[s.length() + 1];
     strcpy(c, s.c_str());
     int is_sent = send(*client_socket, c, strlen(c), 0);
+    delete (c);
     if (is_sent == -1) {
       std::cout << "Error sending message" << std::endl;
     }
