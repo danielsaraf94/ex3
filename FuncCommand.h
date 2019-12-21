@@ -22,6 +22,7 @@ class FuncCommand : public Command {
   FuncCommand(vector<string> *, int, CommandManager *);
   int execute(vector<string> *, int);
   int returnIndex();
+  void setArgs();
 };
 
 #endif //EX3_1__FUNCCOMMAND_H_
