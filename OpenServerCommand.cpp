@@ -104,6 +104,7 @@ void OpenServerCommand::readFromClient(int client_socket,
     int valread = read(client_socket, buffer, 1024);
     char *end = buffer;
     for (int i = 0; i < 36; i++) {
+      if(glob->to_close) break;
       if (sim_table->find((*numTosim)[i]) == sim_table->end()) {
         strtod(end, &end);
         end++;
