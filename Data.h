@@ -34,6 +34,7 @@ class Data : public Command {
   int getIndexBeforeOp(string, int);
   int getIndexAfterOp(string, int);
   string getVarName();
+  bool replace(std::string &str, const std::string &from, const std::string &to);
 
 };
 
