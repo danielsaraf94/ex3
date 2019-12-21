@@ -49,15 +49,21 @@ unordered_map<string, Data *> *CommandManager::getSimMap() {
   return &this->sim_table;
 }
 int CommandManager::addFuncCommand(int index) {
-  int varLoc = (*this->string_vec)[index].find("var");
-  if(varLoc>-1){
-    string varName = (*this->string_vec)[index].substr(3);
-    (*string_vec)[index]="var";
-    string_vec->push_back(varName);
-  }
   FuncCommand* func = new FuncCommand(this->string_vec,index,this);
   command_map[(*this->string_vec)[index-1]]=func;
-  return func->returnIndex();
+  int returnVal = func->returnIndex();
+  int varLoc = (*this->string_vec)[index].find("var");
+  if(varLoc>-1){
+    string variable_name = (*this->string_vec)[index].substr(4);
+    variable_name.erase(remove(variable_name.begin(), variable_name.end(), ')'), variable_name.end());
+    variable_name.erase(remove(variable_name.begin(), variable_name.end(), '{'), variable_name.end());
+    (*string_vec)[index-1]="var";
+    (*string_vec)[index]=variable_name;
+    func->setArgs();
+  }else{
+    func->setIndex(index+1);
+  }
+  return returnVal;
 }
 // realise all the allocated memory
 CommandManager::~CommandManager() {

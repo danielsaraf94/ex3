@@ -10,17 +10,14 @@ FuncCommand::FuncCommand(vector<string> *vector, int i, CommandManager *m) {
   this->args = false;
 }
 int FuncCommand::execute(vector<string> *vector, int i) {
-  //calculate how much indexes to move forward when return from execute
   unordered_map<string, Command *> *command_map = manager->getCommnadMap();
 
   if (args) {
-    (*vector)[index + 1] += (*vector)[i];
+    (*vector)[index] +="="+(*vector)[i];
+    i = this->index-1;
   }
-  i = this->index;
-  int first_index = i - 1;
-  i++;
-  // if the condoion is true - execute all the commands in the if scope
-  while (i < first_index + return_index - 1) {
+  // if the condition is true - execute all the commands in the if scope
+  while (i < return_index - 1) {
     Command *c = (*command_map)[(*string_vec)[i]];
     i += c->execute(string_vec, i + 1);
   }
@@ -28,6 +25,9 @@ int FuncCommand::execute(vector<string> *vector, int i) {
 }
 void FuncCommand::setArgs() {
   this->args = true;
+}
+void FuncCommand::setIndex(int i){
+  this->index = i;
 }
 int FuncCommand::returnIndex() {
   int i = this->index;

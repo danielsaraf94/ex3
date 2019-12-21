@@ -68,6 +68,7 @@ bool ::ConditionParser::isTrue(string str) {
     string varName = str.substr(i, l - i);
     varName.erase(remove(varName.begin(), varName.end(), ')'), varName.end());
     varName.erase(remove(varName.begin(), varName.end(), '('), varName.end());
+    varName.erase(remove(varName.begin(), varName.end(), '{'), varName.end());
     globals->locker.lock();
     if (this->symbol_table->find(varName) == this->symbol_table->end()) {
       globals->locker.unlock();

@@ -6,31 +6,36 @@
 #include "CommandManager.h"
 
 using namespace std;
-void parse(vector<string> &,CommandManager*);
+void parse(vector<string> &, CommandManager *);
 
 int main(int argc, char *argv[]) {
   Globals g;
-  Lexer lex(argv[argc-1]);
+  Lexer lex(argv[argc - 1]);
   vector<string> string_vec;
   if (!lex.lexer(&string_vec)) {
     cout << "error - can't open fly.txt" << endl;
     exit(1);
   }
-  CommandManager manager{&string_vec,&g};
+  CommandManager manager{&string_vec, &g};
   // parse the string vector made by fly.txt
-  parse(string_vec,&manager);
+  parse(string_vec, &manager);
 
-  cout<<"closing threads and free memory"<<endl;
+  cout << "closing threads and free memory" << endl;
   g.to_close = true;
   sleep(2);
 }
 
-void parse(vector<string> &string_vec,CommandManager* manger) {
-  unordered_map<string,Command*>* command_map = manger->getCommnadMap();
-  for (int i = 0; i < (int)string_vec.size();) {
+void parse(vector<string> &string_vec, CommandManager *manger) {
+  unordered_map<string, Command *> *command_map = manger->getCommnadMap();
+  for (int i = 0; i < (int) string_vec.size();) {
+    if (string_vec[i] == "takeoff") {
+      int j = 0;
+    }
     Command *c = (*command_map)[string_vec[i]];
     if (c) {
       i += c->execute(&string_vec, i + 1);
+    } else {
+      i = manger->addFuncCommand(i + 1);
     }
   }
 }

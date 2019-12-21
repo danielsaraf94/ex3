@@ -20,6 +20,7 @@ class FuncCommand : public Command {
   CommandManager* manager;
  public:
   FuncCommand(vector<string> *, int, CommandManager *);
+  void setIndex(int);
   int execute(vector<string> *, int);
   int returnIndex();
   void setArgs();
