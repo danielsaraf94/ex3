@@ -127,6 +127,70 @@ class Div : public BinaryOperator {
 };
 
 //----------------------------------------------------------------------------
+class BoolOperator : public Expression {
+ protected:
+  Expression *expR = nullptr, *expL = nullptr;
+
+  BoolOperator(Expression *r, Expression *l) : expR(r), expL(l) {};
+ public:
+  ~BoolOperator() override;
+};
+
+//----------------------------------------------------------------------------
+class Smaller : public BoolOperator {
+
+ public:
+  Smaller(Expression *r, Expression *l) : BoolOperator(r, l) {};
+
+  double calculate() override;
+};
+
+//----------------------------------------------------------------------------
+class SmallerEqual : public BoolOperator {
+
+ public:
+  SmallerEqual(Expression *r, Expression *l) : BoolOperator(r, l) {};
+
+  double calculate() override;
+};
+
+//----------------------------------------------------------------------------
+class Bigger : public BoolOperator {
+
+ public:
+  Bigger(Expression *r, Expression *l) : BoolOperator(r, l) {};
+
+  double calculate() override;
+};
+
+//----------------------------------------------------------------------------
+class BiggerEqual : public BoolOperator {
+
+ public:
+  BiggerEqual(Expression *r, Expression *l) : BoolOperator(r, l) {};
+
+  double calculate() override;
+};
+
+//----------------------------------------------------------------------------
+class Equal : public BoolOperator {
+
+ public:
+  Equal(Expression *r, Expression *l) : BoolOperator(r, l) {};
+
+  double calculate() override;
+};
+
+//----------------------------------------------------------------------------
+class NotEqual : public BoolOperator {
+
+ public:
+  NotEqual(Expression *r, Expression *l) : BoolOperator(r, l) {};
+
+  double calculate() override;
+};
+
+
 class Interpreter {
   map<string, double> vMap;
 

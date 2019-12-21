@@ -19,10 +19,9 @@ int Var::execute(vector<string> *string_vec, int i) {
   if (sign == 3) {
     string otherVar = str->substr(index + 1, str->length());
     globals->locker.lock();
-    double value = (*this->varName_data_map)[otherVar]->getValue();
     data = new Data(varName, "", sign, this->update_simulator_q, this->varName_data_map,globals);
+    data->execute(string_vec,i);
     globals->locker.unlock();
-    data->setValue(value);
   } else {
     string sim = str->substr(index + 2, str->length());
     sim.erase(std::remove_if(sim.begin(), sim.end(), &Var::isParentheses), sim.end());
