@@ -11,10 +11,12 @@ ConditionParser::ConditionParser(unordered_map<string, Command *> *map1, unorder
 }
 
 int ConditionParser::execute(vector<string> *string_vec, int i) {
+  //calculate how much indexes to move forward when return from execute
   int return_index = returnIndex(string_vec, i) - i;
   int first_index = i - 1;
   if (isTrue((*string_vec)[i])) {
     i++;
+    // if the condoion is true - execute all the commands in the if scope
     while (i < first_index + return_index - 1) {
       Command *c = (*command_map)[(*string_vec)[i]];
       i += c->execute(string_vec, i + 1);
@@ -24,7 +26,7 @@ int ConditionParser::execute(vector<string> *string_vec, int i) {
 }
 
 int ConditionParser::returnIndex(vector<string> *string_vec, int i) {
-
+  //calculate how much indexes to move forward when return from execute
   while ((int)(*string_vec)[i].find("{") == -1) {
     i++;
   }
@@ -43,6 +45,7 @@ int ConditionParser::returnIndex(vector<string> *string_vec, int i) {
 }
 bool ::ConditionParser::isTrue(string str) {
   Data d;
+  // make all the two char operator represent as one
   string s1 = "<=";
   string s2 = "$";
   string s3 = ">=";
@@ -58,6 +61,7 @@ bool ::ConditionParser::isTrue(string str) {
   d.replace(str, s7, s8);
   int i = 0, l = 0;
   Interpreter interpreter;
+  // generate an Expression according to the string and calculate its value
   while (i <= (int)str.length()) {
     i = d.getIndexAfterOp(str, l);
     l = d.getIndexBeforeOp(str, i);
@@ -76,6 +80,7 @@ bool ::ConditionParser::isTrue(string str) {
     interpreter.setVariables(varName + "=" + value);
     i = l + 1;
   }
+  // return the operator to theirs original representation
   d.replace(str, s2, s1);
   d.replace(str, s4, s3);
   d.replace(str, s6, s5);

@@ -54,7 +54,7 @@ int OpenServerCommand::execute(vector<string> *string_vec, int i) {
   t.detach();
   return 2;
 }
-
+// index according to xml to sim address
 void OpenServerCommand::initialSimToNumMap() {
   this->numTosim[0] = "/instrumentation/airspeed-indicator/indicated-speed-kt";
   this->numTosim[1] = "/sim/time/warp";
@@ -102,16 +102,19 @@ void OpenServerCommand::readFromClient(int client_socket,
 
   char buffer[1024] = {0};
   while (!glob->to_close) {
+    // read from client
     this_thread::sleep_for(std::chrono::milliseconds(10));
     read(client_socket, buffer, 1024);
     char *end = buffer;
     for (int i = 0; i < 36; i++) {
+      // check if the var is in the map
       if (glob->to_close) break;
       if (sim_table->find((*numTosim)[i]) == sim_table->end()) {
         strtod(end, &end);
         end++;
         continue;
       }
+      // if the variable exists - update it
       glob->locker.lock();
       (*sim_table)[(*numTosim)[i]]->setValue(strtod(end, &end));
       glob->locker.unlock();

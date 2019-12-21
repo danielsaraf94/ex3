@@ -12,9 +12,11 @@ Var::Var(unordered_map<string, Command *> *map1,
 int Var::execute(vector<string> *string_vec, int i) {
   string *str = &(*string_vec)[i];
   int index = 0;
+  // check the update direction
   int sign = getSign(str, &index);
   string varName = str->substr(0, index);
   Interpreter inter;
+  // check if the name is valid
   try {
     inter.setVariables(varName + "=0");
   } catch (...) {
@@ -22,6 +24,7 @@ int Var::execute(vector<string> *string_vec, int i) {
     exit(1);
   }
   Data *data;
+  // create the Data object
   if (sign == 3) {
     string otherVar = str->substr(index + 1, str->length());
     globals->locker.lock();
@@ -40,6 +43,7 @@ int Var::execute(vector<string> *string_vec, int i) {
       globals->locker.unlock();
     }
   }
+  // insert to the maps
   globals->locker.lock();
   (*this->varName_data_map)[varName] = data;
   (*this->str_command_map)[varName] = data;
@@ -54,6 +58,7 @@ bool Var::isParentheses(char c) {
     default:return false;
   }
 }
+// check the update direction
 int Var::getSign(string *str, int *index) {
   int i = 0;
   int found = str->find("->");

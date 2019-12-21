@@ -12,6 +12,7 @@ int PrintCommand::execute(vector<string> *string_vec, int i) {
   s.erase(std::remove(s.begin(), s.end(), ')'), s.end());
   s.erase(std::remove(s.begin(), s.end(), '('), s.end());
   globals->locker.lock();
+  // check if its variable
   if ((*symbol_table).find(s) != (*symbol_table).end()) {
     Data *d = (*symbol_table)[s];
     globals->locker.unlock();

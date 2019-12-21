@@ -15,6 +15,7 @@ Data::Data(string var,
 }
 int Data::execute(vector<string> *string_vec, int j) {
   string str = (*string_vec)[j];
+  // make all the two char operator represent as one
   string s1 = "<=";
   string s2 = "$";
   string s3 = ">=";
@@ -30,6 +31,7 @@ int Data::execute(vector<string> *string_vec, int j) {
   int i = 0, l = 0;
   Interpreter interpreter;
   str=str.substr(getIndexBeforeOp(str,0));
+  // extract all the variable out of the string and insert it the the interpreter vars map
   while (i <= (int)str.length()) {
     i = getIndexAfterOp(str, l);
     l = getIndexBeforeOp(str, i);
@@ -48,11 +50,13 @@ int Data::execute(vector<string> *string_vec, int j) {
     interpreter.setVariables(variable_name + "=" + value_str);
     i = l + 1;
   }
+  // return the original operation representation
   replace(str, s2, s1);
   replace(str, s4, s3);
   replace(str, s6, s5);
   replace(str, s8, s7);
   try {
+    // try to calculate the expression
     string expression = str.substr(1);
     auto* exp =interpreter.interpret(expression);
     double newValue = exp->calculate();
@@ -101,6 +105,8 @@ string Data::getVarName() {
 int Data::getSign() {
   return this->sign;
 }
+
+//replace sub strings
 bool Data::replace(std::string &str, const std::string &from, const std::string &to) {
   size_t start_pos = str.find(from);
   if (start_pos == std::string::npos)

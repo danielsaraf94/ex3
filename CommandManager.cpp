@@ -9,6 +9,7 @@ CommandManager::CommandManager(vector<string> *vector, Globals *g) {
   initializeCommandMap();
 }
 void CommandManager::initializeCommandMap() {
+  // initialize all the command and insert it to command map
   Command *server = new OpenServerCommand(&sim_table, globals);
 
   command_map[string("openDataServer")] = server;
@@ -46,6 +47,7 @@ unordered_map<string, Data *> *CommandManager::getSymbolMap() {
 unordered_map<string, Data *> *CommandManager::getSimMap() {
   return &this->sim_table;
 }
+// realise all the allocated memory
 CommandManager::~CommandManager() {
   for (pair<string, Command *> p : this->command_map) {
     Command *c = p.second;

@@ -43,6 +43,7 @@ int ClientConnectCommand::execute(vector<string> *string_vec, int i) {
   return 2;
 }
 void ClientConnectCommand::extractAddressFromString(string *str) {
+  // extract the ip and port strings from str
   string s = *str;
   int ipStart = 0, ipLen = 0, portStart = 0;
   int i;
@@ -75,7 +76,9 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
   string var_name;
   Data *var;
   bool is_q_empty = true;
+  // run until close is on
   while (!(g->to_close)) {
+    // check the update q for new variable the update the simulator
     while (is_q_empty && !(g->to_close)) {
       g->locker.lock();
       if (!update_simulator_q->empty()) is_q_empty = false;
@@ -91,6 +94,7 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
     g->locker.unlock();
     char *c = new char[s.length() + 1];
     strcpy(c, s.c_str());
+    // send the update to the server (simulator)
     int is_sent = send(*client_socket, c, strlen(c), 0);
     delete (c);
     if (is_sent == -1) {
@@ -98,6 +102,7 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
     }
     is_q_empty = true;
   }
+  // close the thread and realise the socket
   close(*client_socket);
 
 }

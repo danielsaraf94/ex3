@@ -17,7 +17,9 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
   CommandManager manager{&string_vec,&g};
+  // parse the string vector made by fly.txt
   parse(string_vec,&manager);
+
   cout<<"closing threads and free memory"<<endl;
   g.to_close = true;
   sleep(2);
