@@ -274,7 +274,7 @@ string Interpreter::getLetter(string s, int &k) {
         if (s.substr(start, 1) == "+") { return "^"; }
         if (s.substr(start, 1) == "-") { return "%"; }
       }
-      if (s.substr(start - 1, 1) == "(" && isOperator(s.substr(start + 1, 1))) {
+      if (s.substr(start - 1, 1) == "(") {
         k++;
         if (s.substr(start, 1) == "+") { return "^"; }
         if (s.substr(start, 1) == "-") { return "%"; }
