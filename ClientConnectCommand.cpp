@@ -6,7 +6,7 @@
 ClientConnectCommand::ClientConnectCommand(unordered_map<string, Data *> *s_t, queue<string> *u_s_q, Globals *g)
     : symbol_table(s_t), update_simulator_q(u_s_q), glob(g) {
 }
-int ClientConnectCommand::execute(vector<string>* string_vec,int i) {
+int ClientConnectCommand::execute(vector<string> *string_vec, int i) {
   extractAddressFromString(&(*string_vec)[i]);
 
   //create socket
@@ -22,7 +22,7 @@ int ClientConnectCommand::execute(vector<string>* string_vec,int i) {
   address.sin_family = AF_INET;//IP4
   address.sin_addr.s_addr = inet_addr(ip.c_str());  //the localhost address
   Interpreter inter;
-  address.sin_port = htons((int)(inter.interpret(port)->calculate()));
+  address.sin_port = htons((int) (inter.interpret(port)->calculate()));
   //we need to convert our number (both port & localhost)
   // to a number that the network understands
 
@@ -63,7 +63,7 @@ void ClientConnectCommand::extractAddressFromString(string *str) {
     break;
   }
 
-  port = s.substr(portStart, s.length()-portStart-1);
+  port = s.substr(portStart, s.length() - portStart - 1);
   ip = s.substr(ipStart, ipLen);
 }
 void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_table,
@@ -73,11 +73,12 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
   Data *var;
   bool is_q_empty = true;
   while (!(g->to_close)) {
-    while (is_q_empty) {
+    while (is_q_empty && !(g->to_close)) {
       g->locker.lock();
       if (!update_simulator_q->empty()) is_q_empty = false;
       g->locker.unlock();
     }
+    if(g->to_close) break;
     g->locker.lock();
     var_name = update_simulator_q->front();
     update_simulator_q->pop();
