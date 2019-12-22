@@ -8,7 +8,7 @@
 Lexer::Lexer(string name) {
   this->file_name = name;
 }
-
+//the lexer separate the text into sequence of command - arguments
 bool Lexer::lexer(vector<string> *vector) {
   ifstream input_file;
   input_file.open(this->file_name, ifstream::in);
@@ -17,12 +17,16 @@ bool Lexer::lexer(vector<string> *vector) {
     return false;
   }
   string line;
+  //reading line after line from the text
   while (getline(input_file, line)) {
     if (line == "") {
       continue;
     }
+
     int i = separationLoc(line);
+    //the separate location in the line to command - args according to i
     string command = line.substr(0, i);
+    //some manipulate on the string command
     command.erase(std::remove_if(command.begin(), command.end(), &isParenthesesOrApos), command.end());
     command.erase(std::remove_if(command.begin(), command.end(), &isSpace), command.end());
     command.erase(std::remove_if(command.begin(), command.end(), &isSpace), command.end());
@@ -30,6 +34,7 @@ bool Lexer::lexer(vector<string> *vector) {
     vector->push_back(command);
     if (i != (int) line.length()) {
       string args = line.substr(i, line.length());
+      //the print command is a special case when we do want to remove the spaces
       if (command != "Print") {
         args.erase(std::remove_if(args.begin(), args.end(), &Lexer::isSpace), args.end());
       }
@@ -45,6 +50,7 @@ bool Lexer::lexer(vector<string> *vector) {
   input_file.close();
   return true;
 }
+//return the index of the separate location of the line to command - args
 int Lexer::separationLoc(string &str) {
   bool flag = false;
   int i;
@@ -60,6 +66,7 @@ int Lexer::separationLoc(string &str) {
   }
   return i;
 }
+//helper to the remove if
 bool Lexer::isParenthesesOrApos(char c) {
   switch (c) {
     /*
@@ -70,6 +77,7 @@ bool Lexer::isParenthesesOrApos(char c) {
     default:return false;
   }
 }
+//helper to the remove if
 bool Lexer::isSpace(char c) {
   if (c == ' ') {
     return true;
