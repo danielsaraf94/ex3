@@ -11,8 +11,9 @@ FuncCommand::FuncCommand(vector<string> *vector, int i, CommandManager *m) {
 }
 int FuncCommand::execute(vector<string> *vector, int i) {
   unordered_map<string, Command *> *command_map = manager->getCommnadMap();
-
+  string varName;
   if (args) {
+    varName=(*vector)[index];
     (*vector)[index] +="="+(*vector)[i];
     i = this->index-1;
   }
@@ -20,6 +21,10 @@ int FuncCommand::execute(vector<string> *vector, int i) {
   while (i < return_index - 1) {
     Command *c = (*command_map)[(*string_vec)[i]];
     i += c->execute(string_vec, i + 1);
+  }
+  if(args){
+    (*vector)[index]=varName;
+    command_map->erase(varName);
   }
   return 2;
 }
