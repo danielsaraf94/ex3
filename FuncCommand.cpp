@@ -28,6 +28,7 @@ int FuncCommand::execute(vector<string> *vector, int i) {
     Command *com = (*command_map)[varName];
     delete (com);
     command_map->erase(varName);
+    manager->getSymbolMap()->erase(varName);
   }
   return 2;
 }
