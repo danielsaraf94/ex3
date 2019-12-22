@@ -37,8 +37,9 @@ bool Lexer::lexer(vector<string> *vector) {
       //the print command is a special case when we do want to remove the spaces
       if (command != "Print") {
         args.erase(std::remove_if(args.begin(), args.end(), &Lexer::isSpace), args.end());
+        args.erase(std::remove_if(args.begin(), args.end(), &Lexer::isParenthesesOrApos), args.end());
       }
-      args.erase(std::remove_if(args.begin(), args.end(), &Lexer::isParenthesesOrApos), args.end());
+
       int simLoc = args.find("sim");
       if (simLoc > -1) {
         args = args.substr(0, simLoc) + args.substr(simLoc + 3);
