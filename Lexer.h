@@ -11,7 +11,7 @@ using namespace std;
 
 class Lexer {
   string file_name;
-  static bool isParenthesesOrApos(char);
+  static bool isApos(char);
   static bool isSpace(char);
   int separationLoc(string &);
  public:

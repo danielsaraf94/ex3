@@ -1,6 +1,6 @@
 
 #include "FuncCommand.h"
-FuncCommand::FuncCommand(vector<string> *vector, int i, CommandManager *m,Globals * g) {
+FuncCommand::FuncCommand(vector<string> *vector, int i, CommandManager *m, Globals *g) {
   this->string_vec = vector;
   this->index = i;
   this->manager = m;
@@ -9,26 +9,58 @@ FuncCommand::FuncCommand(vector<string> *vector, int i, CommandManager *m,Global
 }
 int FuncCommand::execute(vector<string> *vector, int i) {
   unordered_map<string, Command *> *command_map = manager->getCommnadMap();
+  unordered_map<string, Data *> *symbol_map = manager->getSymbolMap();
+  unordered_map<string, Data *> *sim_map = manager->getSimMap();
   string varName;
+  int otherVarSign = 3;
+  Data *otherVar;
   //if there is an argument we add its value
+  int j = i;
+  i = this->index;
   if (args) {
     varName = (*vector)[index];
-    (*vector)[index] += "=" + (*vector)[i];
-    i = this->index - 1;
+    (*vector)[index] += "=" + (*vector)[j];
+    i--;
+    otherVar = (*symbol_map)[varName];
+    if (otherVar) {
+      otherVarSign = otherVar->getSign();
+      if (otherVarSign == 2) {
+        sim_map->erase(varName);
+      }
+      command_map->erase(varName);
+      globals->locker.lock();
+      symbol_map->erase(varName);
+      globals->locker.unlock();
+    }
+
   }
   //execute all the commands in the func scope
   while (i < return_index - 1) {
     Command *c = (*command_map)[(*string_vec)[i]];
     i += c->execute(string_vec, i + 1);
   }
+  //if there is arguments
   if (args) {
     (*vector)[index] = varName;
-    Command *com = (*command_map)[varName];
+    Data *com = (*symbol_map)[varName];
+    int sign = com->getSign();
+    if (sign == 2) {
+      sim_map->erase(varName);
+    }
     delete (com);
     command_map->erase(varName);
     globals->locker.lock();
-    manager->getSymbolMap()->erase(varName);
+    symbol_map->erase(varName);
     globals->locker.unlock();
+    if (otherVar) {
+      (*command_map)[varName] = otherVar;
+      globals->locker.lock();
+      (*symbol_map)[varName] = otherVar;
+      globals->locker.unlock();
+      if (otherVarSign == 2) {
+        (*sim_map)[varName] = otherVar;
+      }
+    }
   }
   return 2;
 }

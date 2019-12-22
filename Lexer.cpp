@@ -27,19 +27,17 @@ bool Lexer::lexer(vector<string> *vector) {
     //the separate location in the line to command - args according to i
     string command = line.substr(0, i);
     //some manipulate on the string command
-    command.erase(std::remove_if(command.begin(), command.end(), &isParenthesesOrApos), command.end());
-    command.erase(std::remove_if(command.begin(), command.end(), &isSpace), command.end());
+    command.erase(std::remove_if(command.begin(), command.end(), &isApos), command.end());
     command.erase(std::remove_if(command.begin(), command.end(), &isSpace), command.end());
     command.erase(std::remove(command.begin(), command.end(), '\t'), command.end());
     vector->push_back(command);
     if (i != (int) line.length()) {
       string args = line.substr(i, line.length());
-      //the print command is a special case when we do want to remove the spaces
+      //the print command is a special case when we do want to remove the spaces and the ""
       if (command != "Print") {
         args.erase(std::remove_if(args.begin(), args.end(), &Lexer::isSpace), args.end());
-        args.erase(std::remove_if(args.begin(), args.end(), &Lexer::isParenthesesOrApos), args.end());
+        args.erase(std::remove_if(args.begin(), args.end(), &Lexer::isApos), args.end());
       }
-
       int simLoc = args.find("sim");
       if (simLoc > -1) {
         args = args.substr(0, simLoc) + args.substr(simLoc + 3);
@@ -68,20 +66,10 @@ int Lexer::separationLoc(string &str) {
   return i;
 }
 //helper to the remove if
-bool Lexer::isParenthesesOrApos(char c) {
-  switch (c) {
-    /*
-    case '(':
-    case ')':
-     */
-    case '"':return true;
-    default:return false;
-  }
+bool Lexer::isApos(char c) {
+    return (c=='"');
 }
 //helper to the remove if
 bool Lexer::isSpace(char c) {
-  if (c == ' ') {
-    return true;
-  }
-  return false;
+  return (c==' ');
 }
