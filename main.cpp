@@ -28,9 +28,6 @@ int main(int argc, char *argv[]) {
 void parse(vector<string> &string_vec, CommandManager *manger) {
   unordered_map<string, Command *> *command_map = manger->getCommnadMap();
   for (int i = 0; i < (int) string_vec.size();) {
-    if (string_vec[i] == "takeoff") {
-      int j = 0;
-    }
     Command *c = (*command_map)[string_vec[i]];
     if (c) {
       i += c->execute(&string_vec, i + 1);

@@ -73,7 +73,7 @@ bool Lexer::isParenthesesOrApos(char c) {
     case '(':
     case ')':
      */
-    case '"':return true;
+   // case '"':return true;
     default:return false;
   }
 }
