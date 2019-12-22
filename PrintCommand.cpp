@@ -18,6 +18,12 @@ int PrintCommand::execute(vector<string> *string_vec, int i) {
     globals->locker.unlock();
     cout << d->getValue() << endl;
   } else {
+    if (s.find('\"') == string::npos) {
+      globals->locker.unlock();
+      cout << "variable " << s << " doesnt exists" << endl;
+      return 2;
+    }
+    s.erase(std::remove(s.begin(), s.end(), '\"'), s.end());
     globals->locker.unlock();
     cout << s << endl;
   }

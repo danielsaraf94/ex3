@@ -17,9 +17,10 @@ class FuncCommand : public Command {
   bool args;
   vector<string> *string_vec;
   int return_index;
-  CommandManager* manager;
+  CommandManager *manager;
+  Globals* globals;
  public:
-  FuncCommand(vector<string> *, int, CommandManager *);
+  FuncCommand(vector<string> *, int, CommandManager *, Globals *);
   void setIndex(int);
   int execute(vector<string> *, int);
   int returnIndex();

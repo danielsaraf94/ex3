@@ -1,13 +1,11 @@
-//
-// Created by shlomo on 21/12/2019.
-//
 
 #include "FuncCommand.h"
-FuncCommand::FuncCommand(vector<string> *vector, int i, CommandManager *m) {
+FuncCommand::FuncCommand(vector<string> *vector, int i, CommandManager *m,Globals * g) {
   this->string_vec = vector;
   this->index = i;
   this->manager = m;
   this->args = false;
+  this->globals = g;
 }
 int FuncCommand::execute(vector<string> *vector, int i) {
   unordered_map<string, Command *> *command_map = manager->getCommnadMap();
@@ -28,7 +26,9 @@ int FuncCommand::execute(vector<string> *vector, int i) {
     Command *com = (*command_map)[varName];
     delete (com);
     command_map->erase(varName);
+    globals->locker.lock();
     manager->getSymbolMap()->erase(varName);
+    globals->locker.unlock();
   }
   return 2;
 }

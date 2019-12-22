@@ -49,7 +49,7 @@ unordered_map<string, Data *> *CommandManager::getSimMap() {
   return &this->sim_table;
 }
 int CommandManager::addFuncCommand(int index) {
-  FuncCommand *func = new FuncCommand(this->string_vec, index, this);
+  FuncCommand *func = new FuncCommand(this->string_vec, index, this, globals);
   command_map[(*this->string_vec)[index - 1]] = func;
   int returnVal = func->returnIndex();
   int varLoc = (*this->string_vec)[index].find("var");
