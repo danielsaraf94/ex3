@@ -115,8 +115,9 @@ void OpenServerCommand::readFromClient(int client_socket,
         continue;
       }
       // if the variable exists - update it
+      double value = strtod(end, &end);
       glob->locker.lock();
-      (*sim_table)[(*numTosim)[i]]->setValue(strtod(end, &end));
+      (*sim_table)[(*numTosim)[i]]->setValue(value);
       glob->locker.unlock();
       end++;
     }
