@@ -3,10 +3,13 @@
 
 #ifndef EX3_3__SLEEPCOMMAND_H_
 #define EX3_3__SLEEPCOMMAND_H_
-
+#include <thread>
 #include "Command.h"
 #include "iostream"
 #include <unistd.h>
+#include <iostream>
+#include <chrono>
+
 using namespace std;
 
 class SleepCommand : public Command {
@@ -14,7 +17,7 @@ class SleepCommand : public Command {
   int execute(vector<string>* string_vec,int i){
     Interpreter interpreter;
     auto *exp = interpreter.interpret((*string_vec)[i]);
-    sleep(exp->calculate()/1000);
+    std::this_thread::sleep_for (std::chrono::milliseconds((int)exp->calculate()));
     delete(exp);
     return 2;
   }

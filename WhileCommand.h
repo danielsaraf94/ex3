@@ -14,7 +14,6 @@
 #include "ClientConnectCommand.h"
 #include "PrintCommand.h"
 #include "Var.h"
-#include "SleepCommand.h"
 #include "ConditionParser.h"
 
 class WhileCommand : public Command {
