@@ -9,16 +9,16 @@ PrintCommand::PrintCommand(unordered_map<string, Data *> *s, Globals *g) {
 }
 int PrintCommand::execute(vector<string> *string_vec, int i) {
   string s = (*string_vec)[i];
-  int start = 0, end = 0, j;
-  for (j = 0; j < s.length(); j++) {
-    if (s[j] == '(') {
-      start = j + 1;
+  int start = 0, end = 0, k;
+  for (k = 0; k <(int) s.length(); k++) {
+    if (s[k] == '(') {
+      start = k + 1;
       break;
     }
   }
-  for (j += 1; j < s.length(); j++) {
-    if (s[j] == ')')
-      end = j;
+  for (k += 1; k <(int) s.length(); k++) {
+    if (s[k] == ')')
+      end = k;
   }
   if (end == 0) {
     cerr << "invalid Print" << endl;
@@ -28,22 +28,22 @@ int PrintCommand::execute(vector<string> *string_vec, int i) {
   // check the string contains " char
   if (s.find('\"') != string::npos) {
     // " char found - its a string, extract the string and print it
-    int start = 0, end = 0, j;
-    for (j = 0; j < s.length(); j++) {
+    int start1 = 0, end1 = 0, j;
+    for (j = 0; j <(int) s.length(); j++) {
       if (s[j] == '"') {
-        start = j + 1;
+        start1 = j + 1;
         break;
       }
     }
-    for (j += 1; j < s.length(); j++) {
+    for (j += 1; j < (int)s.length(); j++) {
       if (s[j] == '"')
-        end = j;
+        end1 = j;
     }
-    if (end == 0) {
+    if (end1 == 0) {
       cerr << "invalid Print" << endl;
       return 2;
     }
-    cout << s.substr(start, end - start) << endl;
+    cout << s.substr(start1, end1 - start1) << endl;
   } else if ((*symbol_table).find(s) != (*symbol_table).end()) { // one variable in the symbol table
     Data *d = (*symbol_table)[s];
     cout << d->getValue() << endl;
@@ -64,26 +64,26 @@ int PrintCommand::execute(vector<string> *string_vec, int i) {
     d.replace(s, s3, s4);
     d.replace(s, s5, s6);
     d.replace(s, s7, s8);
-    int i = 0, l = 0;
+    int t = 0, l = 0;
     Interpreter interpreter;
     // extract all the variable out of the string and insert it the the interpreter vars map
-    while (i <= (int) s.length()) {
-      i = d.getIndexAfterOp(s, l);
-      l = d.getIndexBeforeOp(s, i);
-      string variable_name = s.substr(i, l - i);
+    while (t <= (int) s.length()) {
+      t = d.getIndexAfterOp(s, l);
+      l = d.getIndexBeforeOp(s, t);
+      string variable_name = s.substr(t, l - t);
       variable_name.erase(remove(variable_name.begin(), variable_name.end(), ')'), variable_name.end());
       variable_name.erase(remove(variable_name.begin(), variable_name.end(), '('), variable_name.end());
       globals->locker.lock();
       if (this->symbol_table->find(variable_name) == this->symbol_table->end()) {
         globals->locker.unlock();
-        i = l + 1;
+        t = l + 1;
         continue;
       }
       Data *data = (*this->symbol_table)[variable_name];
       globals->locker.unlock();
       string value_str = std::to_string(data->getValue());
       interpreter.setVariables(variable_name + "=" + value_str);
-      i = l + 1;
+      t = l + 1;
     }
     // return the original operation representation
     d.replace(s, s2, s1);
