@@ -15,12 +15,13 @@ OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map, Globals
     exit(1);
   }
   initialSimToNumMap();
+  this->glob->sizeOfvalue = 0;
 }
 int OpenServerCommand::execute(vector<string> *string_vec, int i) {
   Interpreter interpreter;
   auto *exp = interpreter.interpret((*string_vec)[i]);
   double port = exp->calculate();
-  delete(exp);
+  delete (exp);
   //bind socket to IP address
   // we first need to create the sockaddr obj.
   sockaddr_in address; //in means IP4
@@ -100,27 +101,68 @@ void OpenServerCommand::readFromClient(int client_socket,
                                        unordered_map<string, Data *> *sim_table,
                                        unordered_map<int, string> *numTosim) {
 
-  char buffer[1024] = {0};
   while (!glob->to_close) {
+    char buffer[1024] = {0};
     // read from client
     this_thread::sleep_for(std::chrono::milliseconds(10));
     read(client_socket, buffer, 1024);
-    char *end = buffer;
-    for (int i = 0; i < 36; i++) {
-      // check if the var is in the map
-      if (glob->to_close) break;
-      if (sim_table->find((*numTosim)[i]) == sim_table->end()) {
-        strtod(end, &end);
-        end++;
-        continue;
+    int i=0;
+    if(glob->sizeOfvalue!=0){
+      int index =glob->sizeOfvalue;
+      while(buffer[i]!='\n'){
+        if (glob->to_close) break;
+        glob->value[index]=buffer[i];
+        i++;
+        index++;
       }
-      // if the variable exists - update it
-      double value = strtod(end, &end);
-      glob->locker.lock();
-      (*sim_table)[(*numTosim)[i]]->setValue(value);
-      glob->locker.unlock();
-      end++;
+      updatesFromSimulator(glob,sim_table,numTosim,glob->value);
+      i++;
+      glob->sizeOfvalue=0;
     }
+    char *end = buffer+i;
+    int j = i;
+    for (; i < 1024; i++) {
+      if (glob->to_close) break;
+      if(buffer[i]==0){
+        break;
+      }
+      if (buffer[i] == '\n') {
+        end = buffer + j;
+        updatesFromSimulator(glob, sim_table, numTosim, end);
+        j = i + 1;
+      }
+      if (i == 1023 && buffer[i] != '\n') {
+        saveTheLastData(glob,end,i-j+1);
+        glob->sizeOfvalue=i-j+1;
+      }
+    }
+
   }
   close(server_socket);
+}
+void OpenServerCommand::updatesFromSimulator(Globals *glob,
+                                             unordered_map<string, Data *> *sim_table,
+                                             unordered_map<int, string> *numTosim, char *end) {
+  int i;
+  for (i = 0; i < 36; i++) {
+    // check if the var is in the map
+    if (glob->to_close) break;
+    if (sim_table->find((*numTosim)[i]) == sim_table->end()) {
+      strtod(end, &end);
+      end++;
+      continue;
+    }
+    // if the variable exists - update it
+    double value = strtod(end, &end);
+    glob->locker.lock();
+    (*sim_table)[(*numTosim)[i]]->setValue(value);
+    glob->locker.unlock();
+    end++;
+  }
+}
+void OpenServerCommand::saveTheLastData(Globals *glob, char * end,int size) {
+  int i;
+  for(i=0;i<size;i++){
+    glob->value[i]=end[i];
+  }
 }

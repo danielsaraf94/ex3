@@ -333,7 +333,7 @@ bool Interpreter::leftIsPrefer(string oper, string top) {
   priorityMap["!"] = 1;
   priorityMap["^"] = 4;
   priorityMap["%"] = 4;
-  return (priorityMap[oper] >= priorityMap[top]);
+  return (priorityMap[oper] > priorityMap[top]);
 }
 
 Expression *Interpreter::expressionCreator(queue<string> q) {
