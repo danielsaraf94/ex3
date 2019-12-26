@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 
   cout << "closing threads and free memory" << endl;
   g.to_close = true;
-  sleep(2);
+  std::this_thread::sleep_for (std::chrono::seconds(2));
 }
 
 void parse(vector<string> &string_vec, CommandManager *manger) {
