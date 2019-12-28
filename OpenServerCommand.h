@@ -21,9 +21,10 @@ class OpenServerCommand : public Command {
   double array[1024];
  unordered_map<int, string> numTosim;
  unordered_map<string, Data *> *sim_table;
+ unordered_map<string, Data *> *symbol_table;
  Globals* glob;
  public:
-  OpenServerCommand(unordered_map<string, Data *> *map,Globals*);
+  OpenServerCommand(unordered_map<string, Data *> *map,Globals*,unordered_map<string, Data *> *);
   void initialSimToNumMap();
   int execute(vector<string> *,int);
   static void readFromClient(int,int,Globals*, unordered_map<string, Data *> *, unordered_map<int, string> *);

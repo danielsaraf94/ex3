@@ -21,12 +21,8 @@ int ClientConnectCommand::execute(vector<string> *string_vec, int i) {
 
   address.sin_family = AF_INET;//IP4
   address.sin_addr.s_addr = inet_addr(ip.c_str());  //the localhost address
-  Interpreter inter;
-  auto *exp = inter.interpret(port);
-  address.sin_port = htons((int) (exp->calculate()));
-  delete (exp);
-  //we need to convert our number (both port & localhost)
-  // to a number that the network understands
+  Data d(glob, symbol_table);
+  address.sin_port = htons((int) d.fromStringToValue(port));
 
 
   // Requesting a connection with the server on local host with port

@@ -18,8 +18,8 @@
 
 class WhileCommand : public Command {
   unordered_map<string, Command *> *c_m;
-  unordered_map<string, Data *> *s_t;
   vector<string> *s_v;
+  unordered_map<string, Data *> *s_t;
   Globals* globals;
  public:
   WhileCommand(unordered_map<string, Command *> *, vector<string> *, unordered_map<string, Data *> *,Globals*);

@@ -4,9 +4,12 @@
 
 #include "OpenServerCommand.h"
 #include "ex1.h"
-OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map, Globals *g) {
+OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map,
+                                     Globals *g,
+                                     unordered_map<string, Data *> *map2) {
   glob = g;
   this->sim_table = map;
+  this->symbol_table = map2;
   //create socket
   this->socketfd = socket(AF_INET, SOCK_STREAM, 0);
   if (socketfd == -1) {
@@ -18,10 +21,8 @@ OpenServerCommand::OpenServerCommand(unordered_map<string, Data *> *map, Globals
   this->glob->sizeOfvalue = 0;
 }
 int OpenServerCommand::execute(vector<string> *string_vec, int i) {
-  Interpreter interpreter;
-  auto *exp = interpreter.interpret((*string_vec)[i]);
-  double port = exp->calculate();
-  delete (exp);
+  Data d(glob, symbol_table);
+  double port = d.fromStringToValue((*string_vec)[i]);
   //bind socket to IP address
   // we first need to create the sockaddr obj.
   sockaddr_in address; //in means IP4
@@ -106,24 +107,24 @@ void OpenServerCommand::readFromClient(int client_socket,
     // read from client
     this_thread::sleep_for(std::chrono::milliseconds(10));
     read(client_socket, buffer, 1024);
-    int i=0;
-    if(glob->sizeOfvalue!=0){
-      int index =glob->sizeOfvalue;
-      while(buffer[i]!='\n'){
+    int i = 0;
+    if (glob->sizeOfvalue != 0) {
+      int index = glob->sizeOfvalue;
+      while (buffer[i] != '\n') {
         if (glob->to_close) break;
-        glob->value[index]=buffer[i];
+        glob->value[index] = buffer[i];
         i++;
         index++;
       }
-      updatesFromSimulator(glob,sim_table,numTosim,glob->value);
+      updatesFromSimulator(glob, sim_table, numTosim, glob->value);
       i++;
-      glob->sizeOfvalue=0;
+      glob->sizeOfvalue = 0;
     }
-    char *end = buffer+i;
+    char *end = buffer + i;
     int j = i;
     for (; i < 1024; i++) {
       if (glob->to_close) break;
-      if(buffer[i]==0){
+      if (buffer[i] == 0) {
         break;
       }
       if (buffer[i] == '\n') {
@@ -132,8 +133,8 @@ void OpenServerCommand::readFromClient(int client_socket,
         j = i + 1;
       }
       if (i == 1023 && buffer[i] != '\n') {
-        saveTheLastData(glob,end,i-j+1);
-        glob->sizeOfvalue=i-j+1;
+        saveTheLastData(glob, end, i - j + 1);
+        glob->sizeOfvalue = i - j + 1;
       }
     }
   }
@@ -160,9 +161,9 @@ void OpenServerCommand::updatesFromSimulator(Globals *glob,
     end++;
   }
 }
-void OpenServerCommand::saveTheLastData(Globals *glob, char * end,int size) {
+void OpenServerCommand::saveTheLastData(Globals *glob, char *end, int size) {
   int i;
-  for(i=0;i<size;i++){
-    glob->value[i]=end[i];
+  for (i = 0; i < size; i++) {
+    glob->value[i] = end[i];
   }
 }

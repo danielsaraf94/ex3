@@ -11,7 +11,7 @@ CommandManager::CommandManager(vector<string> *vector, Globals *g) {
 }
 void CommandManager::initializeCommandMap() {
   // initialize all the command and insert it to command map
-  Command *server = new OpenServerCommand(&sim_table, globals);
+  Command *server = new OpenServerCommand(&sim_table, globals,&symbol_table);
 
   command_map[string("openDataServer")] = server;
 
@@ -27,7 +27,7 @@ void CommandManager::initializeCommandMap() {
 
   command_map[string("Print")] = print;
 
-  Command *sleep = new SleepCommand();
+  Command *sleep = new SleepCommand( &symbol_table, globals);
 
   command_map[string("Sleep")] = sleep;
 

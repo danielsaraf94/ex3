@@ -47,6 +47,7 @@ int PrintCommand::execute(vector<string> *string_vec, int i) {
     cout << s.substr(start1, end1 - start1) << endl;
   } else {
     Data d(globals, symbol_table);
+    s.erase(remove(s.begin(), s.end(), ' '), s.end());
     cout << d.fromStringToValue(s) << endl;
   }
   return 2;

@@ -13,12 +13,13 @@
 using namespace std;
 
 class SleepCommand : public Command {
+  unordered_map<string, Data *> *symbol_table;
+  Globals *globals;
  public:
-  int execute(vector<string>* string_vec,int i){
-    Interpreter interpreter;
-    auto *exp = interpreter.interpret((*string_vec)[i]);
-    std::this_thread::sleep_for (std::chrono::milliseconds((int)exp->calculate()));
-    delete(exp);
+  SleepCommand(unordered_map<string, Data *> *st, Globals *g) : symbol_table(st), globals(g) {}
+  int execute(vector<string> *string_vec, int i) {
+    Data d(globals, symbol_table);
+    std::this_thread::sleep_for(std::chrono::milliseconds((int) d.fromStringToValue((*string_vec)[i])));
     return 2;
   }
 };
