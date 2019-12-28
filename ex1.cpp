@@ -3,6 +3,7 @@
 //
 #include <regex>
 #include "ex1.h"
+#include "Globals.h"
 
 double Value::calculate() {
   return val;

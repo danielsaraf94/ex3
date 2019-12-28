@@ -1,6 +1,9 @@
 //
 // Created by daniels on 07/11/2019.
 //
+
+#ifndef UNTITLED2_EX1_H
+#define UNTITLED2_EX1_H
 #include <cstring>
 #include <iostream>
 #include <map>
@@ -9,8 +12,9 @@
 #include <queue>
 #include <stdexcept>
 #include "Expression.h"
-#ifndef UNTITLED2_EX1_H
-#define UNTITLED2_EX1_H
+#include "Globals.h"
+#include "unordered_map"
+#include "Data.h"
 
 using namespace std;
 
@@ -190,7 +194,6 @@ class NotEqual : public BoolOperator {
   double calculate() override;
 };
 
-
 class Interpreter {
   map<string, double> vMap;
 
@@ -213,7 +216,6 @@ class Interpreter {
   Expression *interpret(string stringExp);
 
   void setVariables(string);
-
 };
 
 #endif //UNTITLED2_EX1_H

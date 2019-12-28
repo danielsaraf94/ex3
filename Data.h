@@ -25,6 +25,7 @@ class Data : public Command {
   int sign;
  public:
   Data() {};
+  Data(Globals*,unordered_map<string, Data *> *);
   Data(string, string, int, queue<string> *, unordered_map<string, Data *> *,Globals *);
   virtual int execute(vector<string> *, int);
   void setValue(double);
@@ -35,7 +36,7 @@ class Data : public Command {
   int getIndexAfterOp(string, int);
   string getVarName();
   bool replace(std::string &str, const std::string &from, const std::string &to);
-
+  double fromStringToValue(string);
 };
 
 #endif //EX3_CMAKE_BUILD_DEBUG_DATA_H_

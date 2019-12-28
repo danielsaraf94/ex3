@@ -20,8 +20,9 @@ class WhileCommand : public Command {
   unordered_map<string, Command *> *c_m;
   unordered_map<string, Data *> *s_t;
   vector<string> *s_v;
+  Globals* globals;
  public:
-  WhileCommand(unordered_map<string, Command *> *, vector<string> *);
+  WhileCommand(unordered_map<string, Command *> *, vector<string> *, unordered_map<string, Data *> *,Globals*);
   int execute(vector<string> *, int);
 };
 

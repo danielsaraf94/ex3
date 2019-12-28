@@ -35,7 +35,7 @@ void CommandManager::initializeCommandMap() {
 
   command_map[string("if")] = conPar;
 
-  Command *while_command = new WhileCommand(&command_map, string_vec);
+  Command *while_command = new WhileCommand(&command_map, string_vec, &symbol_table, globals);
 
   command_map[string("while")] = while_command;
 }
