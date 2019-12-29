@@ -27,12 +27,14 @@ int Var::execute(vector<string> *string_vec, int i) {
   Data *data;
   // create the Data object
   if (sign == 3) {
+    //the sign is =
     string otherVar = str->substr(index + 1, str->length());
     globals->locker.lock();
     data = new Data(varName, "", sign, this->update_simulator_q, this->varName_data_map, globals);
     globals->locker.unlock();
     data->execute(string_vec, i);
   } else {
+    // the sign is <- or ->
     string sim = str->substr(index + 2, str->length());
     sim.erase(std::remove_if(sim.begin(), sim.end(), &Var::isParentheses), sim.end());
     globals->locker.lock();

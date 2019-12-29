@@ -49,6 +49,7 @@ unordered_map<string, Data *> *CommandManager::getSimMap() {
   return &this->sim_table;
 }
 int CommandManager::addFuncCommand(int index) {
+  // when find a new function, add it to the command table
   FuncCommand *func = new FuncCommand(this->string_vec, index, this, globals);
   command_map[(*this->string_vec)[index - 1]] = func;
   int returnVal = func->returnIndex();

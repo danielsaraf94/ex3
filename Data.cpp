@@ -19,11 +19,14 @@ Data::Data(string var,
   this->globals = g;
 }
 int Data::execute(vector<string> *string_vec, int j) {
+  // extract the string of the expression, send it to interpret and calculate
   int i = getIndexBeforeOp((*string_vec)[j],0);
   string str = (*string_vec)[j].substr(i+1);
+  // set the value of this data obj to it, and update the simulator if it  should
   setValue(fromStringToValue(str));
   return 2;
 }
+//return the index before the first operator
 int Data::getIndexBeforeOp(string str, int i) {
   for (; i < (int) str.length(); i++) {
     if (str[i] == '=' || str[i] == '<' || str[i] == '>' || str[i] == '/' || str[i] == '*' || str[i] == '+'
@@ -33,6 +36,7 @@ int Data::getIndexBeforeOp(string str, int i) {
   }
   return i;
 }
+//return the index after the first operator
 int Data::getIndexAfterOp(string str, int i) {
   for (; i < (int) str.length(); i++) {
     if (!(str[i] == '=' || str[i] == '<' || str[i] == '>' || str[i] == '/' || str[i] == '*' || str[i] == '+'
@@ -42,6 +46,8 @@ int Data::getIndexAfterOp(string str, int i) {
   }
   return i;
 }
+
+// set the value of this data obj to it, and update the simulator if it  should
 void Data::setValue(double val) {
   this->value = val;
   if (sign == 1) {
@@ -63,6 +69,7 @@ int Data::getSign() {
   return this->sign;
 }
 
+// get a string, convert it to an expression return the calculation
 double Data::fromStringToValue(string str) {
   int i = 0, l = 0;
   // make all the two char operator represent as one
@@ -115,6 +122,7 @@ double Data::fromStringToValue(string str) {
   }
   return 0;
 }
+
 //replace sub strings
 bool Data::replace(std::string &str, const std::string &from, const std::string &to) {
   size_t start_pos = str.find(from);

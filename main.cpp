@@ -17,9 +17,10 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
   CommandManager manager{&string_vec, &g};
-  // parse the string vector made by fly.txt
+  // parse the string vector made by file_name.txt
   parse(string_vec, &manager);
-
+  // at the time the program reaching here, all the file.txt command was executed and the program should finish
+  // announce other threads that the program is over and they should terminate, wait 2 second till shut down the process
   cout << "closing threads and free memory" << endl;
   g.to_close = true;
   std::this_thread::sleep_for (std::chrono::seconds(2));

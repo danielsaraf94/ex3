@@ -9,7 +9,7 @@ WhileCommand::WhileCommand(unordered_map<string, Command *> *cm, vector<string> 
 }
 int WhileCommand::execute(vector<string> *string_vec, int i) {
   string condition = (*string_vec)[i];
-  //make if condition
+  //make a if condition
   ConditionParser *c = (ConditionParser *) (*c_m)["if"];
   Data d(globals, s_t);
   while (d.fromStringToValue(condition)) {
