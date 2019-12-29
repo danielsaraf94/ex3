@@ -1,4 +1,4 @@
-
+//
 #include "FuncCommand.h"
 FuncCommand::FuncCommand(vector<string> *vector, int i, CommandManager *m, Globals *g) {
   this->string_vec = vector;

@@ -1,6 +1,5 @@
 //
 // Created by shlomo on 13/12/2019.
-//
 
 #ifndef EX3_CMAKE_BUILD_DEBUG_DATA_H_
 #define EX3_CMAKE_BUILD_DEBUG_DATA_H_

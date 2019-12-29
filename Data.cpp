@@ -1,5 +1,5 @@
 #include "Data.h"
-
+//
 Data::Data(Globals *g, unordered_map<string, Data *> *map) {
   this->globals = g;
   this->symbol_table = map;
