@@ -97,6 +97,7 @@ void ClientConnectCommand::updateServer(unordered_map<string, Data *> *symbol_ta
       std::cout << "Error sending message" << std::endl;
     }
     is_q_empty = true;
+    this_thread::sleep_for(std::chrono::milliseconds(10));
   }
   // close the thread and realise the socket
   close(*client_socket);
